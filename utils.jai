@@ -190,3 +190,62 @@ reject_non_floating_point_types :: inline (info : *Type_Info) -> *Type_Info #mus
 {
 	return ifx is_floating_point (info) then info else null;
 }
+
+String_Builder :: struct
+{
+	// Fmt uses this
+	write_byte :: inline (builder : *String_Builder, byte : u8)
+	{
+		if builder
+		{
+			if builder.count == builder.allocated
+				grow_builder (builder, builder.allocated + 8);
+			builder.data[builder.count] = byte;
+			builder.count += 1;
+		}
+	}
+
+	count : s64;
+	data : *u8;
+	allocated : s64;
+	allocator : Allocator;
+}
+
+to_string :: inline (using builder : String_Builder) -> string #must
+{
+	result : string = ---;
+	result.data  = data;
+	result.count = count;
+
+	return result;
+}
+
+reset_builder :: inline (using builder : *String_Builder)
+{
+	allocator.proc (.FREE, 0, 0, data, allocator.data);
+	data = null;
+	count = 0;
+	allocated = 0;
+}
+
+grow_builder :: inline (using builder : *String_Builder, additional_capacity : s64)
+{
+	assert (allocator.proc != null, "String builder is not initialized.");
+	if additional_capacity <= 0
+		return;
+	new_capacity := allocated + additional_capacity;
+	new_data := allocator.proc (.RESIZE, new_capacity, allocated, data, allocator.data);
+	data = new_data;
+	allocated = new_capacity;
+}
+
+print_to_builder :: inline (builder : *String_Builder, fmt_str : string, args : ..Any)
+{
+	format (builder, fmt_str, ..args);
+}
+
+println_to_builder :: inline (builder : *String_Builder, fmt_str : string, args : ..Any)
+{
+	print_to_builder (builder, fmt_str, ..args);
+	print_to_builder (builder, "\n");
+}
