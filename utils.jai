@@ -34,18 +34,10 @@ max :: (a : $T, b : T) -> T #expand
 sign :: (val : $T) -> T #expand
 #modify { T = reject_non_numeric_types (T); }
 {
-#if #run is_unsigned (type_info (T))
-{
-	return 1;
-}
-else
-{
-	     if val < 0 then return -1;
-	else if val > 0 then return  1;
-
-	return 0;
-}
-
+	#if #run is_unsigned (type_info (T))
+		return 1;
+	else
+		return ifx val < 0 then -1 else 1;
 }
 
 clamp :: (x : $T, min : T, max : T) -> T #expand
