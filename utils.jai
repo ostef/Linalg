@@ -196,7 +196,7 @@ String_Builder :: struct
 	// Fmt uses this
 	write_byte :: inline (builder : *String_Builder, byte : u8)
 	{
-		if builder
+		if byte != 0 && builder
 		{
 			if builder.count == builder.allocated
 				grow_builder (builder, builder.allocated + 8);
