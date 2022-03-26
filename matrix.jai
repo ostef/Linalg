@@ -506,9 +506,6 @@ to_mat3f :: #bake_arguments resize (T2 = f32, M2 = 3, N2 = 3);
 to_mat3d :: #bake_arguments resize (T2 = f64, M2 = 3, N2 = 3);
 to_mat3 :: #bake_arguments resize (M2 = 3, N2 = 3);
 
-mat3f :: #bake_constants mat3 (T = f32);
-mat3d :: #bake_constants mat3 (T = f64);
-
 mat3 :: inline (
 	r0c0 : $T, r0c1 : T, r0c2 : T,
 	r1c0 :  T, r1c1 : T, r1c2 : T,
@@ -543,6 +540,46 @@ mat3 :: inline (
 	result.r2 = r2;
 
 	return result;
+}
+
+mat3f :: inline (
+	r0c0 : f32, r0c1 : f32, r0c2 : f32,
+	r1c0 : f32, r1c1 : f32, r1c2 : f32,
+	r2c0 : f32, r2c1 : f32, r2c2 : f32
+) -> Mat3f #must
+{
+	return mat3 (r0c0, r0c1, r0c2,
+		r1c0, r1c1, r1c2,
+		r2c0, r2c1, r2c2);
+}
+
+mat3f :: inline (
+	r0 : Vec3f,
+	r1 : Vec3f,
+	r2 : Vec3f
+) -> Mat3f #must
+{
+	return mat3 (r0, r1, r2);
+}
+
+mat3d :: inline (
+	r0c0 : f64, r0c1 : f64, r0c2 : f64,
+	r1c0 : f64, r1c1 : f64, r1c2 : f64,
+	r2c0 : f64, r2c1 : f64, r2c2 : f64
+) -> Mat3d #must
+{
+	return mat3 (r0c0, r0c1, r0c2,
+		r1c0, r1c1, r1c2,
+		r2c0, r2c1, r2c2);
+}
+
+mat3d :: inline (
+	r0 : Vec3d,
+	r1 : Vec3d,
+	r2 : Vec3d
+) -> Mat3d #must
+{
+	return mat3 (r0, r1, r2);
 }
 
 mat3f_from_quat :: #bake_constants mat3_from_quat (T = f32);
@@ -624,9 +661,6 @@ to_mat4f :: #bake_arguments resize (T2 = f32, M2 = 4, N2 = 4);
 to_mat4d :: #bake_arguments resize (T2 = f64, M2 = 4, N2 = 4);
 to_mat4 :: #bake_arguments resize (M2 = 4, N2 = 4);
 
-mat4f :: #bake_constants mat4 (T = f32);
-mat4d :: #bake_constants mat4 (T = f64);
-
 mat4 :: inline (
 	r0c0 : $T, r0c1 : T, r0c2 : T, r0c3 : T,
 	r1c0 :  T, r1c1 : T, r1c2 : T, r1c3 : T,
@@ -672,6 +706,52 @@ mat4 :: inline (
 	result.r3 = r3;
 
 	return result;
+}
+
+mat4f :: inline (
+	r0c0 : f32, r0c1 : f32, r0c2 : f32, r0c3 : f32,
+	r1c0 : f32, r1c1 : f32, r1c2 : f32, r1c3 : f32,
+	r2c0 : f32, r2c1 : f32, r2c2 : f32, r2c3 : f32,
+	r3c0 : f32, r3c1 : f32, r3c2 : f32, r3c3 : f32
+) -> Mat4f #must
+{
+	return mat4 (r0c0, r0c1, r0c2, r0c3,
+		r1c0, r1c1, r1c2, r1c3,
+		r2c0, r2c1, r2c2, r2c3,
+		r3c0, r3c1, r2c2, r3c3);
+}
+
+mat4f :: inline (
+	r0 : Vec4f,
+	r1 : Vec4f,
+	r2 : Vec4f,
+	r3 : Vec4f
+) -> Mat4f #must
+{
+	return mat4 (r0, r1, r2, r3);
+}
+
+mat4d :: inline (
+	r0c0 : f64, r0c1 : f64, r0c2 : f64, r0c3 : f64,
+	r1c0 : f64, r1c1 : f64, r1c2 : f64, r1c3 : f64,
+	r2c0 : f64, r2c1 : f64, r2c2 : f64, r2c3 : f64,
+	r3c0 : f64, r3c1 : f64, r3c2 : f64, r3c3 : f64
+) -> Mat4d #must
+{
+	return mat4 (r0c0, r0c1, r0c2, r0c3,
+		r1c0, r1c1, r1c2, r1c3,
+		r2c0, r2c1, r2c2, r2c3,
+		r3c0, r3c1, r2c2, r3c3);
+}
+
+mat4d :: inline (
+	r0 : Vec4d,
+	r1 : Vec4d,
+	r2 : Vec4d,
+	r3 : Vec4d
+) -> Mat4d #must
+{
+	return mat4 (r0, r1, r2, r3);
 }
 
 mat4f_from_quat :: #bake_constants mat4_from_quat (T = f32);

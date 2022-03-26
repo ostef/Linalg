@@ -444,13 +444,6 @@ operator != :: inline (left : $V/Vector, right : V) -> bool #must
 
 /* Vec2 */
 
-vec2f :: #bake_constants vec2 (T = f32);
-vec2d :: #bake_constants vec2 (T = f64);
-vec2u :: #bake_constants vec2 (T = u32);
-vec2s :: #bake_constants vec2 (T = s16);
-vec2i :: #bake_constants vec2 (T = s32);
-vec2l :: #bake_constants vec2 (T = s64);
-
 vec2 :: inline (x : $T, y : T) -> Vec2 (T) #must
 {
 	result : Vec2 (T) = ---;
@@ -458,6 +451,36 @@ vec2 :: inline (x : $T, y : T) -> Vec2 (T) #must
 	result.y = y;
 
 	return result;
+}
+
+vec2f :: inline (x : f32, y : f32) -> Vec2f #must
+{
+	return vec2 (x, y);
+}
+
+vec2d :: inline (x : f64, y : f64) -> Vec2d #must
+{
+	return vec2 (x, y);
+}
+
+vec2u :: inline (x : u32, y : u32) -> Vec2u #must
+{
+	return vec2 (x, y);
+}
+
+vec2s :: inline (x : s16, y : s16) -> Vec2s #must
+{
+	return vec2 (x, y);
+}
+
+vec2i :: inline (x : s32, y : s32) -> Vec2i #must
+{
+	return vec2 (x, y);
+}
+
+vec2l :: inline (x : s64, y : s64) -> Vec2l #must
+{
+	return vec2 (x, y);
 }
 
 rotate :: inline (v : $V/Vec2, theta : V.F) -> V #must
@@ -487,13 +510,6 @@ perpendicular_ccw :: inline (vec : $V/Vec2) -> V #must
 
 /* Vec3 */
 
-vec3f :: #bake_constants vec3 (T = f32);
-vec3d :: #bake_constants vec3 (T = f64);
-vec3u :: #bake_constants vec3 (T = u32);
-vec3s :: #bake_constants vec3 (T = s16);
-vec3i :: #bake_constants vec3 (T = s32);
-vec3l :: #bake_constants vec3 (T = s64);
-
 vec3 :: inline (x : $T, y : T, z : T) -> Vec3 (T) #must
 {
 	result : Vec3 (T) = ---;
@@ -511,6 +527,66 @@ vec3 :: inline (xy : Vec2 ($T), z : T = 0) -> Vec3 (T) #must
 	result.z = z;
 
 	return result;
+}
+
+vec3f :: inline (x : f32, y : f32, z : f32) -> Vec3f #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3f :: inline (xy : Vec2f, z : f32 = 0) -> Vec3f #must
+{
+	return vec3 (xy, z);
+}
+
+vec3d :: inline (x : f64, y : f64, z : f64) -> Vec3d #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3d :: inline (xy : Vec2d, z : f64 = 0) -> Vec3d #must
+{
+	return vec3 (xy, z);
+}
+
+vec3u :: inline (x : u32, y : u32, z : u32) -> Vec3u #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3u :: inline (xy : Vec2u, z : u32 = 0) -> Vec3u #must
+{
+	return vec3 (xy, z);
+}
+
+vec3s :: inline (x : s16, y : s16, z : s16) -> Vec3s #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3s :: inline (xy : Vec2s, z : s16 = 0) -> Vec3s #must
+{
+	return vec3 (xy, z);
+}
+
+vec3i :: inline (x : s32, y : s32, z : s32) -> Vec3i #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3i :: inline (xy : Vec2i, z : s32 = 0) -> Vec3i #must
+{
+	return vec3 (xy, z);
+}
+
+vec3l :: inline (x : s64, y : s64, z : s64) -> Vec3l #must
+{
+	return vec3 (x, y, z);
+}
+
+vec3l :: inline (xy : Vec2l, z : s64 = 0) -> Vec3l #must
+{
+	return vec3 (xy, z);
 }
 
 cross :: inline (left : Vector ($T, 3), right : Vector (T, 3)) -> Vector (T, 3) #must
@@ -578,13 +654,6 @@ forward_to_orthonormal_basis :: inline (forward : $V/Vec3, base_axes := context.
 
 /* Vec4 */
 
-vec4f :: #bake_constants vec4 (T = f32);
-vec4d :: #bake_constants vec4 (T = f64);
-vec4u :: #bake_constants vec4 (T = u32);
-vec4s :: #bake_constants vec4 (T = s16);
-vec4i :: #bake_constants vec4 (T = s32);
-vec4l :: #bake_constants vec4 (T = s64);
-
 vec4 :: inline (x : $T, y : T, z : T, w : T) -> Vec4 (T) #must
 {
 	result : Vec4 (T) = ---;
@@ -603,4 +672,64 @@ vec4 :: inline (xyz : Vec3 ($T), w : T = 0) -> Vec4 (T) #must
 	result.w = w;
 
 	return result;
+}
+
+vec4f :: inline (x : f32, y : f32, z : f32, w : f32) -> Vec4f #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4f :: inline (xyz : Vec3f, w : f32 = 0) -> Vec4f #must
+{
+	return vec4 (xyz, w);
+}
+
+vec4d :: inline (x : f64, y : f64, z : f64, w : f64) -> Vec4d #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4d :: inline (xyz : Vec3d, w : f64 = 0) -> Vec4d #must
+{
+	return vec4 (xyz, w);
+}
+
+vec4u :: inline (x : u32, y : u32, z : u32, w : u32) -> Vec4u #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4u :: inline (xyz : Vec3u, w : u32 = 0) -> Vec4u #must
+{
+	return vec4 (xyz, w);
+}
+
+vec4s :: inline (x : s16, y : s16, z : s16, w : s16) -> Vec4s #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4s :: inline (xyz : Vec3s, w : s16 = 0) -> Vec4s #must
+{
+	return vec4 (xyz, w);
+}
+
+vec4i :: inline (x : s32, y : s32, z : s32, w : s32) -> Vec4i #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4i :: inline (xyz : Vec3i, w : s32 = 0) -> Vec4i #must
+{
+	return vec4 (xyz, w);
+}
+
+vec4l :: inline (x : s64, y : s64, z : s64, w : s64) -> Vec4l #must
+{
+	return vec4 (x, y, z, w);
+}
+
+vec4l :: inline (xyz : Vec3l, w : s64 = 0) -> Vec4l #must
+{
+	return vec4 (xyz, w);
 }

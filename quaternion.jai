@@ -22,9 +22,6 @@ Quat :: struct (T : Type)
 Quatf :: Quat (f32);
 Quatd :: Quat (f64);
 
-quatf :: #bake_constants quat (T = f32);
-quatd :: #bake_constants quat (T = f64);
-
 quat :: inline (x : $T, y : T, z : T, w : T) -> Quat (T) #must
 {
 	result : Quat (T) = ---;
@@ -43,6 +40,26 @@ quat :: inline (vec : Vec3 ($T), scalar : T) -> Quat (T) #must
 	result.scalar = scalar;
 
 	return result;
+}
+
+quatf :: inline (x : f32, y : f32, z : f32, w : f32) -> Quatf #must
+{
+	return quat (x, y, z, w);
+}
+
+quatf :: inline (vec : Vec3f, scalar : f32) -> Quatf #must
+{
+	return quat (vec, scalar);
+}
+
+quatd :: inline (x : f64, y : f64, z : f64, w : f64) -> Quatd #must
+{
+	return quat (x, y, z, w);
+}
+
+quatd :: inline (vec : Vec3d, scalar : f64) -> Quatd #must
+{
+	return quat (vec, scalar);
 }
 
 quatf_look_at :: quatf_from_forward_up;
