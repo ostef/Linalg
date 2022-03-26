@@ -74,7 +74,6 @@ matrix_from_quat :: inline ($M : s64, $N : s64, q : Quat ($T)) -> Matrix (T, M, 
 	w_z := q.w * q.z;
 
 	result : Matrix (T, M, N);
-	identity (*result);
 	result.r0c0 = cast (T) (1 - 2 * (y_y + z_z));
 	result.r0c1 = cast (T)     (2 * (x_y - w_z));
 	result.r0c2 = cast (T)     (2 * (x_z + w_y));
@@ -101,7 +100,6 @@ matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : 
 	c2 := 1 - c;
 
 	result : Matrix (T, M, N);
-	identity (*result);
 	result.r0c0 = cast (T) ((n.x * n.x * c2) + c);
 	result.r0c1 = cast (T) ((n.y * n.x * c2) - (n.z * s));
 	result.r0c2 = cast (T) ((n.z * n.x * c2) + (n.y * s));
@@ -115,23 +113,6 @@ matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : 
 	result.r2c2 = cast (T) ((n.z * n.z * c2) + c);
 
 	return result;
-}
-
-identity :: inline (mat : *$M/Matrix)
-{
-#insert -> string
-{
-	builder : String_Builder;
-	builder.allocator = context.allocator;
-	for i : 0..M.M - 1
-		for j : 0..M.N - 1
-			if i == j
-				println_to_builder (*builder, "mat.n[%][%] = 1;", i, j);
-			else
-				println_to_builder (*builder, "mat.n[%][%] = 0;", i, j);
-
-	return to_string (builder);
-};
 }
 
 get_row :: inline (mat : $M/Matrix, index : s64) -> M.Row #must
@@ -589,8 +570,7 @@ scale_vector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 rotation_matrix :: inline (mat : $M/Matrix) -> M #must
 {
 	#assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
-	result : M = ---;
-	identity (*result);
+	result : M;
 	set_col (*result, 0, normalized (right_vector (mat)));
 	set_col (*result, 1, normalized (up_vector (mat)));
 	set_col (*result, 2, normalized (forward_vector (mat)));
@@ -690,8 +670,7 @@ mat4f_translate :: #bake_constants mat4_translate (T = f32);
 mat4d_translate :: #bake_constants mat4_translate (T = f64);
 mat4_translate :: inline (vec : Vec3 ($T)) -> Mat4 (T) #must
 {
-	result : Mat4 (T) = ---;
-	identity (*result);
+	result : Mat4 (T);
 	result.r0c3 = vec.x;
 	result.r1c3 = vec.y;
 	result.r2c3 = vec.z;
@@ -703,8 +682,7 @@ mat4f_scale :: #bake_constants mat4_scale (T = f32);
 mat4d_scale :: #bake_constants mat4_scale (T = f64);
 mat4_scale :: inline (vec : Vec3 ($T)) -> Mat4 (T) #must
 {
-	result : Mat4 (T) = ---;
-	identity (*result);
+	result : Mat4 (T);
 	result.r0c0 = vec.x;
 	result.r1c1 = vec.y;
 	result.r2c2 = vec.z;
@@ -801,7 +779,7 @@ translation_vector :: inline (mat : $M/Matrix) -> Vector (M.T, 3) #must
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-inverse :: inline (mat : $M/Mat4, epsilon : M.T = 0.00001) -> M #must, exists : bool
+inverse :: inline (mat : Matrix ($T, 4, 4), epsilon : T = 0.00001) -> Matrix (T, 4, 4) #must, exists : bool
 {
 	a := get_col (mat, 0).xyz;
 	b := get_col (mat, 1).xyz;
@@ -868,7 +846,7 @@ adjugate :: inline (mat : $M/Mat4) -> M #must
 	);
 }
 
-determinant :: inline (mat : $M/Mat4) -> M.T #must
+determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
 {
 	a := get_col (mat, 0).xyz;
 	b := get_col (mat, 1).xyz;

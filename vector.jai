@@ -596,7 +596,7 @@ vec4 :: inline (x : $T, y : T, z : T, w : T) -> Vec4 (T) #must
 	return result;
 }
 
-vec4 :: inline (xyz : Vec3 ($T), w : T = 0) -> Vec4 (T) #must
+vec4 :: inline (xyz : Vector ($T, 3), w : T = 0) -> Vec4 (T) #must
 {
 	result : Vec4 (T) = ---;
 	result.xyz = xyz;
