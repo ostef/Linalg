@@ -63,21 +63,21 @@ quatd :: inline (vec : Vec3d, scalar : f64) -> Quatd #must
 }
 
 quatf_look_at :: quatf_from_forward_up;
-quatd_look_at :: quatd_from_forward_up;
+//quatd_look_at :: quatd_from_forward_up;
 quat_look_at :: quat_from_forward_up;
 quatf_from_forward_up :: #bake_constants quat_from_forward_up (T = f32);
-quatd_from_forward_up :: #bake_constants quat_from_forward_up (T = f64);
+//quatd_from_forward_up :: #bake_constants quat_from_forward_up (T = f64);
 quat_from_forward_up :: inline (forward : Vec3 ($T), up : Vec3 (T)) -> Quat (T) #must
 {
-	f := normalized (forward, .{ 0, 0, 1 });
-	u := normalized (up, .{ 0, 1, 0 });
-	d := dot (Vec3 (T).{ 0, 0, 1 }, f);
+	f := normalized (forward, context.coordinate_axes.forward);
+	u := normalized (up, context.coordinate_axes.up);
+	d := dot (context.coordinate_axes.forward, f);
 	if approx_equals (d, -1, 0.00001)
 		return quat_from_axis_angle (u, PI);
 	else if approx_equals (d, 1, 0.00001)
-		return Quat (T).{ 0, 0, 0, 1 };
+		return Quat (T).{};
 	angle := acos (d);
-	axis := cross (Vec3 (T).{ 0, 0, 1 }, f);
+	axis := cross (context.coordinate_axes.forward, f);
 	axis = normalized (axis);
 
 	return quat_from_axis_angle (axis, angle);
