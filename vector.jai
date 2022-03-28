@@ -1,6 +1,6 @@
 Vector :: struct (T : Type, N : s64)
 {
-	#assert #run is_numeric (type_info (T)) "T needs to be a numeric type.";
+	#assert #run is_numeric (T) "T needs to be a numeric type.";
 	#assert N > 0 "Invalid vector dimensions.";
 
 	// @Note (stefan): F is a floating point type that is 4 bytes
@@ -223,7 +223,7 @@ max :: inline (a : $V/Vector, b : V) -> V #must
 }
 
 lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
-#modify { T2 = reject_non_floating_point_types (T2); }
+#modify { return is_floating_point (T2), "T2 must be a float type."; }
 {
 	result : V = ---;
 #insert -> string
@@ -293,7 +293,7 @@ sub :: inline (left : $V/Vector, right : V) -> V #must
 
 neg :: inline (vec : $V/Vector) -> V #must
 {
-	#assert #run is_signed (type_info (V.T)) "Cannot negate an unsigned vector.";
+	#assert #run is_signed (V.T) "Cannot negate an unsigned vector.";
 
 	result : V = ---;
 #insert -> string
@@ -310,7 +310,7 @@ neg :: inline (vec : $V/Vector) -> V #must
 }
 
 mul :: inline (left : $V/Vector, right : $T) -> V #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	result : V = ---;
 #insert -> string
@@ -327,7 +327,7 @@ mul :: inline (left : $V/Vector, right : $T) -> V #must
 }
 
 div :: inline (left : $V/Vector, right : $T) -> V #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	result : V = ---;
 #insert -> string
@@ -414,20 +414,20 @@ operator - :: inline (left : $V/Vector, right : V) -> V #must
 
 operator - :: inline (vec : $V/Vector) -> V #must
 {
-	#assert #run is_signed (type_info (V.T)) "Cannot negate an unsigned vector.";
+	#assert #run is_signed (V.T) "Cannot negate an unsigned vector.";
 
 	return neg (vec);
 }
 
 operator * :: inline (left : $V/Vector, right : $T) -> V #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 #symmetric
 {
 	return mul (left, right);
 }
 
 operator / :: inline (left : $V/Vector, right : $T) -> V #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	return div (left, right);
 }

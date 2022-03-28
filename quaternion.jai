@@ -1,6 +1,6 @@
 Quat :: struct (T : Type)
 {
-	#assert #run is_floating_point (type_info (T)) "T needs to be a floating point type.";
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
 
 	V3 :: Vec3 (T);
 
@@ -220,7 +220,7 @@ forward_vector :: inline (q : $Q/Quat) -> Vec3 (Q.T) #must
 }
 
 nlerp :: inline (a : $Q/Quat, b : Q, t : $T2, shortest_path := true) -> Q #must
-#modify { T2 = reject_non_floating_point_types (T2); }
+#modify { return is_floating_point (T2), "T2 must be a float type."; }
 {
 	first  := a;
 	second := b;
@@ -264,7 +264,7 @@ neg :: inline (q : $Q/Quat) -> Q #must
 }
 
 mul :: inline (left : $Q/Quat, right : $T) -> Q #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	result : Q = ---;
 	result.x = left.x * right;
@@ -343,7 +343,7 @@ operator - :: inline (q : $Q/Quat) -> Q #must
 }
 
 operator * :: inline (left : $Q/Quat, right : $T) -> Q #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 #symmetric
 {
 	return mul (left, right);
@@ -355,7 +355,7 @@ operator * :: inline (left : $Q/Quat, right : Q) -> Q #must
 }
 
 operator / :: inline (left : $Q/Quat, right : $T) -> Q #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	return div (left, right);
 }

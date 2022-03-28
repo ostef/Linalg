@@ -2,7 +2,7 @@ Matrix :: struct (T : Type, M : s64, N : s64)
 {
 	// @Note (stefan): We might want to also allow integer types, but
 	// for now I want to keep things constrained.
-	#assert #run is_floating_point (type_info (T)) "T needs to be a floating point type.";
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
 	#assert M > 0 && N > 0 "Invalid matrix dimensions.";
 
 	IS_SQUARE :: M == N;
@@ -91,7 +91,7 @@ matrix_from_quat :: inline ($M : s64, $N : s64, q : Quat ($T)) -> Matrix (T, M, 
 
 matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : Vec3 (T).F) -> Matrix (T, M, N) #must
 {
-	#assert #run is_floating_point (type_info (T)) "T needs to be a floating point type.";
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
 	#assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
 	n := normalized (axis);
@@ -173,7 +173,7 @@ transposed :: inline (mat : $M/Matrix) -> M.Transposed #must
 
 resize :: inline (mat : $M/Matrix, $T2 : Type, $M2 : s64, $N2 : s64) -> Matrix (T2, M2, N2) #must
 {
-	#assert #run is_numeric (type_info (T2)) "T2 needs to be a numeric type.";
+	#assert #run is_numeric (T2) "T2 needs to be a numeric type.";
 	#assert M2 > 0 && N2 > 0 "Invalid matrix dimensions.";
 
 	result : Matrix (T2, M2, N2) = ---;
@@ -237,7 +237,7 @@ sub :: inline (left : $M/Matrix, right : M) -> M #must
 
 neg :: inline (mat : $M/Matrix) -> M #must
 {
-	#assert #run is_signed (type_info (M.T)) "Cannot negate an unsigned matrix.";
+	#assert #run is_signed (M.T) "Cannot negate an unsigned matrix.";
 
 	result : M = ---;
 #insert -> string
@@ -256,7 +256,7 @@ neg :: inline (mat : $M/Matrix) -> M #must
 }
 
 mul :: inline (left : $M/Matrix, right : $T) -> M #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	result : M = ---;
 #insert -> string
@@ -351,7 +351,7 @@ mul :: inline (left : Matrix ($T, $M, $N), right : Matrix (T, N, $P)) -> Matrix 
 }
 
 div :: inline (left : $M/Matrix, right : $T) -> M #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	result : M = ---;
 #insert -> string
@@ -438,13 +438,13 @@ operator - :: inline (left : $M/Matrix, right : M) -> M #must
 
 operator - :: inline (mat : $M/Matrix) -> M #must
 {
-	#assert #run is_signed (type_info (M.T)) "Cannot negate an unsigned matrix.";
+	#assert #run is_signed (M.T) "Cannot negate an unsigned matrix.";
 
 	return neg (mat);
 }
 
 operator * :: inline (left : $M/Matrix, right : $T) -> M #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 #symmetric
 {
 	return mul (left, right);
@@ -466,7 +466,7 @@ operator * :: inline (left : Matrix ($T, $M, $N), right : Matrix (T, N, $P)) -> 
 }
 
 operator / :: inline (left : $M/Matrix, right : $T) -> M #must
-#modify { T = reject_non_numeric_types (T); }
+#modify { return is_numeric (T), "T must be numeric."; }
 {
 	return div (left, right);
 }

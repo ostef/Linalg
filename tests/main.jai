@@ -1,4 +1,4 @@
-#import "Linalg2";
+#import "Linalg";
 #import "Type_Traits";
 #import "Fmt";
 
@@ -22,12 +22,12 @@ vector :: ($T : Type, $N : s64)
 	f = distance (v, v);
 	v += v;
 	v -= v;
-#if #run is_signed (type_info (T))
+#if #run is_signed (T)
 	v = -v;
 	v *= 10;
 	v /= 10;
 	b := v == v;
-#if #run is_floating_point (type_info (T))
+#if #run is_floating_point (T)
 {
 	b = approx_zero (v, 0.0001);
 	b = approx_equals (v, v, 0.0001);
@@ -52,7 +52,7 @@ matrix :: ($T : Type, $M : s64, $N : s64)
 	m2 := resize (m, T, 5, 5);
 	m += m;
 	m -= m;
-#if #run is_signed (type_info (T))
+#if #run is_signed (T)
 	m = -m;
 	m *= 10;
 	vr := m * m.Right_Vector.{};
@@ -114,5 +114,5 @@ main :: ()
 	matrix (float, 4, 4);
 
 	quaternion (float32);
-	quaternion (float64);
+	//quaternion (float64);
 }

@@ -1,6 +1,6 @@
 Euler_Angles :: struct (T := f32)
 {
-	#assert #run is_floating_point (type_info (T)) "T needs to be a floating point type.";
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
 
 	yaw, pitch, roll : T;
 
