@@ -1,6 +1,7 @@
 #import "Linalg";
-#import "Type_Traits";
 #import "Fmt";
+
+#load "../utils.jai";
 
 // For now, the following tests are there to make sure things compile fine.
 
