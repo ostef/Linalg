@@ -150,7 +150,7 @@ round :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = round (result.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[{0}] = round (vec.n[{0}]);", i);
 
 	return to_string (builder);
 };
@@ -166,7 +166,7 @@ floor :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = floor (result.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[{0}] = floor (vec.n[{0}]);", i);
 
 	return to_string (builder);
 };
@@ -182,7 +182,7 @@ ceil :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = ceil (result.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[{0}] = ceil (vec.n[{0}]);", i);
 
 	return to_string (builder);
 };
