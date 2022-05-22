@@ -123,7 +123,7 @@ normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.000
 		return fallback, 0;
 	len := length (vec);
 
-	return vec / len, len;
+	return vec * (1.0 / len), len;
 }
 
 clamp :: inline (vec : $V/Vector, min : V, max : V) -> V #must

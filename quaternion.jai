@@ -172,7 +172,7 @@ normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) 
 		return fallback, 0;
 	len := length (q);
 
-	return q / len, len;
+	return q * (1.0 / len), len;
 }
 
 inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q #must
