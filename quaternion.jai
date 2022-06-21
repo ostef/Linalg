@@ -219,13 +219,16 @@ forward_vector :: inline (q : $Q/Quat) -> Vec3 (Q.T) #must
 	return rotate (Vec3 (Q.T).{ 0, 0, 1 }, q);
 }
 
-nlerp :: inline (a : $Q/Quat, b : Q, t : $T2, shortest_path := true) -> Q #must
+nlerp :: inline (a : $Q/Quat, b : Q, t : $T2, $$shortest_path := true) -> Q #must
 #modify { return is_floating_point (T2), "T2 must be a float type."; }
 {
 	first  := a;
 	second := b;
-	if shortest_path && dot (first, second) < 0
-		second = -second;
+	if shortest_path
+	{
+		if dot (first, second) < 0
+			second = -second;
+	}
 
 	return normalized ((1 - t) * first + t * second);
 }
