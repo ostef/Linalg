@@ -1,3 +1,11 @@
+// An M rows N columns matrix (usually we say N by M as
+// N rows and M columns, but since M is before N in the
+// alphabet, I use this convention).
+// Our matrices are row-major in memory, meaning the first
+// subscript index is the row, the second is the column.
+// One reason for this is that matrices are printed as we
+// write them mathematically, and not transposed like
+// would happen with column-major ordering.
 Matrix :: struct (T : Type, M : s64, N : s64)
 {
 	// @Note (stefan): We might want to also allow integer types, but
@@ -13,6 +21,10 @@ Matrix :: struct (T : Type, M : s64, N : s64)
 	Left_Vector  :: Vector (T, M);	// The type of the lhs vector for multiplication
 	Right_Vector :: Vector (T, N);	// The type of the rhs vector for multiplication
 
+	// The following will insert:
+	// * rIcJ : T, where I is the row and J is the column,
+	// * cJrI : T, where I is the row and J is the column,
+	// * rI : Vector (T), where I is the row.
 #insert -> string
 {
 	builder : String_Builder;
