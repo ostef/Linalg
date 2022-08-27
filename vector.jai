@@ -647,7 +647,7 @@ forward_to_orthonormal_basis :: inline (forward : $V/Vec3, base_axes := context.
 		right = cross (up, forward);
 	}
 	else
-		up = cross (up, forward);
+		up = cross (forward, right);
 	
 	return normalized (right), normalized (up);
 }
