@@ -112,6 +112,11 @@ dot :: inline (left : $V/Vector, right : V) -> V.T #must
 };
 }
 
+sqrd_length :: inline (vec : $V/Vector) -> V.F #must
+{
+	return dot (vec, vec);
+}
+
 length :: inline (vec : $V/Vector) -> V.F #must
 {
 	return sqrt (cast (V.F) dot (vec, vec));
@@ -237,6 +242,11 @@ lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 };
 
 	return result;
+}
+
+sqrd_distance :: inline (a : $V/Vector, b : V) -> V.F #must
+{
+	return sqrd_length (b - a);
 }
 
 distance :: inline (a : $V/Vector, b : V) -> V.F #must
