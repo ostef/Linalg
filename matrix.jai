@@ -127,6 +127,32 @@ matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : 
 	return result;
 }
 
+transform_point :: inline (mat : Matrix ($T, $M, $N), point : Vec3 (T)) -> Vec3 (T) #must
+{
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
+	#assert M >= 4 && N >= 4 "Invalid dimensions for matrix (need at least 4 rows and 4 columns).";
+
+	result : Vec3 (T);
+	result.x = mat.r0c0 * point.x + mat.r0c1 * point.y + mat.r0c2 * point.z + mat.r0c3;
+	result.y = mat.r1c0 * point.x + mat.r1c1 * point.y + mat.r1c2 * point.z + mat.r1c3;
+	result.z = mat.r2c0 * point.x + mat.r2c1 * point.y + mat.r2c2 * point.z + mat.r2c3;
+
+	return result;
+}
+
+transform_vector :: inline (mat : Matrix ($T, $M, $N), vec : Vec3 (T)) -> Vec3 (T) #must
+{
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
+	#assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
+
+	result : Vec3 (T);
+	result.x = mat.r0c0 * vec.x + mat.r0c1 * vec.y + mat.r0c2 * vec.z;
+	result.y = mat.r1c0 * vec.x + mat.r1c1 * vec.y + mat.r1c2 * vec.z;
+	result.z = mat.r2c0 * vec.x + mat.r2c1 * vec.y + mat.r2c2 * vec.z;
+
+	return result;
+}
+
 get_row :: inline (mat : $M/Matrix, index : s64) -> M.Row #must
 {
 	return mat.rows[index];
@@ -486,11 +512,6 @@ operator / :: inline (left : $M/Matrix, right : $T) -> M #must
 operator == :: inline (left : $M/Matrix, right : M) -> bool #must
 {
 	return equals (left, right);
-}
-
-operator != :: inline (left : $M/Matrix, right : M) -> bool #must
-{
-	return !equals (left, right);
 }
 
 /* Mat3 */
