@@ -447,11 +447,6 @@ operator == :: inline (left : $V/Vector, right : V) -> bool #must
 	return equals (left, right);
 }
 
-operator != :: inline (left : $V/Vector, right : V) -> bool #must
-{
-	return !equals (left, right);
-}
-
 /* Vec2 */
 
 vec2 :: inline (x : $T, y : T) -> Vec2 (T) #must
