@@ -227,6 +227,22 @@ max :: inline (a : $V/Vector, b : V) -> V #must
 	return result;
 }
 
+abs :: inline (vec : $V/Vector) -> V #must
+{
+	result : V = ---;
+#insert -> string
+{
+	builder : String_Builder;
+	builder.allocator = context.allocator;
+	for i : 0..V.N - 1
+		println_to_builder (*builder, "result.n[{0}] = abs (vec.n[{0}]);", i);
+
+	return to_string (builder);
+};
+
+	return result;
+}
+
 lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 #modify { return is_floating_point (T2), "T2 must be a float type."; }
 {
