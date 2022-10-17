@@ -932,7 +932,7 @@ mat4_orthographic_projection :: inline (l : $T, r : T, b : T, t : T, n : T, f : 
 	return mat4 (
 		2 / (r - l),           0,           0, (r + l) / (l - r),
 		          0, 2 / (t - b),           0, (t + b) / (b - t),
-		          0,           0, 2 / (n / f), (n + f) / (n - f),
+		          0,           0, 2 / (f - n), (n + f) / (n - f),
 		          0,           0,           0,                 1
 	);
 }
