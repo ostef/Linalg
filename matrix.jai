@@ -127,6 +127,32 @@ matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : 
 	return result;
 }
 
+transform_point :: inline (mat : Matrix ($T, $M, $N), point : Vec3 (T)) -> Vec3 (T) #must
+{
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
+	#assert M >= 4 && N >= 4 "Invalid dimensions for matrix (need at least 4 rows and 4 columns).";
+
+	result : Vec3 (T);
+	result.x = mat.r0c0 * point.x + mat.r0c1 * point.y + mat.r0c2 * point.z + mat.r0c3;
+	result.y = mat.r1c0 * point.x + mat.r1c1 * point.y + mat.r1c2 * point.z + mat.r1c3;
+	result.z = mat.r2c0 * point.x + mat.r2c1 * point.y + mat.r2c2 * point.z + mat.r2c3;
+
+	return result;
+}
+
+transform_vector :: inline (mat : Matrix ($T, $M, $N), vec : Vec3 (T)) -> Vec3 (T) #must
+{
+	#assert #run is_floating_point (T) "T needs to be a floating point type.";
+	#assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
+
+	result : Vec3 (T);
+	result.x = mat.r0c0 * vec.x + mat.r0c1 * vec.y + mat.r0c2 * vec.z;
+	result.y = mat.r1c0 * vec.x + mat.r1c1 * vec.y + mat.r1c2 * vec.z;
+	result.z = mat.r2c0 * vec.x + mat.r2c1 * vec.y + mat.r2c2 * vec.z;
+
+	return result;
+}
+
 get_row :: inline (mat : $M/Matrix, index : s64) -> M.Row #must
 {
 	return mat.rows[index];
@@ -488,11 +514,6 @@ operator == :: inline (left : $M/Matrix, right : M) -> bool #must
 	return equals (left, right);
 }
 
-operator != :: inline (left : $M/Matrix, right : M) -> bool #must
-{
-	return !equals (left, right);
-}
-
 /* Mat3 */
 
 to_mat3f :: #bake_arguments resize (T2 = f32, M2 = 3, N2 = 3);
@@ -575,6 +596,34 @@ mat3d :: inline (
 	return mat3 (r0, r1, r2);
 }
 
+mat3_from_right_up_forward :: inline (right : $V/Vec3, up : V, forward : V) -> Mat3 (V.T) #must
+{
+	result : Mat3 (V.T) = ---;
+	result.r0c0 = right.x;
+	result.r1c0 = right.y;
+	result.r2c0 = right.z;
+
+	result.r0c1 = up.x;
+	result.r1c1 = up.y;
+	result.r2c1 = up.z;
+
+	result.r0c2 = forward.x;
+	result.r1c2 = forward.y;
+	result.r2c2 = forward.z;
+
+	return result;
+}
+
+mat3f_from_right_up_forward :: inline (right : Vec3f, up : Vec3f, forward : Vec3f) -> Mat3f #must
+{
+	return mat3_from_right_up_forward (right, up, forward);
+}
+
+mat3d_from_right_up_forward :: inline (right : Vec3d, up : Vec3d, forward : Vec3d) -> Mat3d #must
+{
+	return mat3_from_right_up_forward (right, up, forward);
+}
+
 mat3f_from_quat :: #bake_constants mat3_from_quat (T = f32);
 mat3d_from_quat :: #bake_constants mat3_from_quat (T = f64);
 mat3_from_quat :: #bake_arguments matrix_from_quat (M = 3, N = 3);
@@ -590,19 +639,25 @@ mat3_rotate :: mat3_from_axis_angle;
 right_vector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 {
 	#assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
-	return get_col (mat, 0).xyz;
+	result := get_col (mat, 0);
+
+	return normalized (vec3 (result.x, result.y, result.z));
 }
 
 up_vector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 {
 	#assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
-	return get_col (mat, 1).xyz;
+	result := get_col (mat, 1);
+
+	return normalized (vec3 (result.x, result.y, result.z));
 }
 
 forward_vector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 {
 	#assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
-	return get_col (mat, 2).xyz;
+	result := get_col (mat, 2);
+
+	return normalized (vec3 (result.x, result.y, result.z));
 }
 
 scale_vector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
@@ -746,6 +801,42 @@ mat4d :: inline (
 	return mat4 (r0, r1, r2, r3);
 }
 
+mat4_from_right_up_forward_origin :: inline (right : $V/Vec3, up : V, forward : V, origin := V.{}) -> Mat4 (V.T) #must
+{
+	result : Mat4 (V.T) = ---;
+	result.r0c0 = right.x;
+	result.r1c0 = right.y;
+	result.r2c0 = right.z;
+	result.r3c0 = 0;
+
+	result.r0c1 = up.x;
+	result.r1c1 = up.y;
+	result.r2c1 = up.z;
+	result.r3c1 = 0;
+
+	result.r0c2 = forward.x;
+	result.r1c2 = forward.y;
+	result.r2c2 = forward.z;
+	result.r3c2 = 0;
+
+	result.r0c3 = origin.x;
+	result.r1c3 = origin.y;
+	result.r2c3 = origin.z;
+	result.r3c3 = 0;
+
+	return result;
+}
+
+mat4f_from_right_up_forward_origin :: inline (right : Vec3f, up : Vec3f, forward : Vec3f, origin := Vec3f.{}) -> Mat4f #must
+{
+	return mat4_from_right_up_forward_origin (right, up, forward, origin);
+}
+
+mat4d_from_right_up_forward_origin :: inline (right : Vec3d, up : Vec3d, forward : Vec3d, origin := Vec3d.{}) -> Mat4d #must
+{
+	return mat4_from_right_up_forward_origin (right, up, forward, origin);
+}
+
 mat4f_from_quat :: #bake_constants mat4_from_quat (T = f32);
 mat4d_from_quat :: #bake_constants mat4_from_quat (T = f64);
 mat4_from_quat :: #bake_arguments matrix_from_quat (M = 4, N = 4);
@@ -841,7 +932,7 @@ mat4_orthographic_projection :: inline (l : $T, r : T, b : T, t : T, n : T, f : 
 	return mat4 (
 		2 / (r - l),           0,           0, (r + l) / (l - r),
 		          0, 2 / (t - b),           0, (t + b) / (b - t),
-		          0,           0, 2 / (n / f), (n + f) / (n - f),
+		          0,           0, 2 / (f - n), (n + f) / (n - f),
 		          0,           0,           0,                 1
 	);
 }

@@ -112,6 +112,11 @@ dot :: inline (left : $V/Vector, right : V) -> V.T #must
 };
 }
 
+sqrd_length :: inline (vec : $V/Vector) -> V.F #must
+{
+	return dot (vec, vec);
+}
+
 length :: inline (vec : $V/Vector) -> V.F #must
 {
 	return sqrt (cast (V.F) dot (vec, vec));
@@ -222,6 +227,22 @@ max :: inline (a : $V/Vector, b : V) -> V #must
 	return result;
 }
 
+abs :: inline (vec : $V/Vector) -> V #must
+{
+	result : V = ---;
+#insert -> string
+{
+	builder : String_Builder;
+	builder.allocator = context.allocator;
+	for i : 0..V.N - 1
+		println_to_builder (*builder, "result.n[{0}] = abs (vec.n[{0}]);", i);
+
+	return to_string (builder);
+};
+
+	return result;
+}
+
 lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 #modify { return is_floating_point (T2), "T2 must be a float type."; }
 {
@@ -237,6 +258,11 @@ lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 };
 
 	return result;
+}
+
+sqrd_distance :: inline (a : $V/Vector, b : V) -> V.F #must
+{
+	return sqrd_length (b - a);
 }
 
 distance :: inline (a : $V/Vector, b : V) -> V.F #must
@@ -435,11 +461,6 @@ operator / :: inline (left : $V/Vector, right : $T) -> V #must
 operator == :: inline (left : $V/Vector, right : V) -> bool #must
 {
 	return equals (left, right);
-}
-
-operator != :: inline (left : $V/Vector, right : V) -> bool #must
-{
-	return !equals (left, right);
 }
 
 /* Vec2 */

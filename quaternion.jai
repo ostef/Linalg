@@ -367,8 +367,3 @@ operator == :: inline (left : $Q/Quat, right : Q) -> bool #must
 {
 	return equals (left, right);
 }
-
-operator != :: inline (left : $Q/Quat, right : Q) -> bool #must
-{
-	return !equals (left, right);
-}
