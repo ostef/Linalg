@@ -1,7 +1,7 @@
-// @Note (stefan): We import Math for trig functions and PI.
+// @Note (stefan): We import Math for trig functions.
 // I've moved a lot of the math functions from my Math module
 // to utils.jai so that users can use any Math module, since
-// any sensible Math module should provide PI and trigonometry.
+// any sensible Math module should provide trigonometry.
 #import "Math";
 #import "Fmt";
 
@@ -66,3 +66,6 @@ coordinate_axes :: inline (right : string, up : string, forward : string) -> Coo
 
 f32 :: float32;
 f64 :: float64;
+
+PI   : f32 : 3.1415927;
+PI64 : f64 : 3.141592653589793;

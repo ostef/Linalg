@@ -3,7 +3,7 @@
 Linear algebra module written in Jai, for games.
 
 # Dependencies
-Linalg depends on a module named 'Math', that provides a PI constant as well as your good old trigonometry functions.
+Linalg depends on a module named 'Math', that provides your good old trigonometry functions.
 It also depends on my [Fmt module](https://github.com/ostef/jai-fmt).
 
 # Coordinate system
