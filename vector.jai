@@ -423,9 +423,9 @@ approx_equals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #mu
 };
 }
 
-operator [] :: inline (vec : $V/Vector, index : s64) -> V.T #must
+operator *[] :: inline (vec : $V/Vector, index : s64) -> *V.T #must
 {
-	return vec.n[index];
+	return *vec.n[index];
 }
 
 operator + :: inline (left : $V/Vector, right : V) -> V #must

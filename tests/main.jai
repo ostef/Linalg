@@ -38,6 +38,8 @@ vector :: ($T : Type, $N : s64)
 	v = cross (v, v);
 }
 	t = v[1];
+	v[1] = 10;
+	assert (v[1] == 10);
 }
 
 matrix :: ($T : Type, $M : s64, $N : s64)
@@ -66,6 +68,10 @@ matrix :: ($T : Type, $M : s64, $N : s64)
 	b := m == m;
 #if M >= 3 && N >= 3
 	m = matrix_from_axis_angle (M, N, Vec3 (T).{}, 0);
+	m[1][1] = 100;
+	assert (m[1][1] == 100);
+	m[1] = m.Row.{};
+	assert (m[1] == m.Row.{});
 }
 
 quaternion :: ($T : Type)

@@ -325,9 +325,9 @@ approx_equals :: inline (left : $Q/Quat, right : Q, epsilon : Q.T) -> bool #must
 	return approx_equals (left.x, right.x, epsilon) && approx_equals (left.y, right.y, epsilon) && approx_equals (left.z, right.z, epsilon) && approx_equals (left.w, right.w, epsilon);
 }
 
-operator [] :: inline (q : $Q/Quat, index : s64) -> Q.T #must
+operator *[] :: inline (q : $Q/Quat, index : s64) -> *Q.T #must
 {
-	return q.n[index];
+	return *q.n[index];
 }
 
 operator + :: inline (left : $Q/Quat, right : Q) -> Q #must

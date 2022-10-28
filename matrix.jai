@@ -459,9 +459,9 @@ approx_equals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool #mu
 };
 }
 
-operator [] :: inline (mat : $M/Matrix, row : s64) -> M.Row #must
+operator *[] :: inline (mat : $M/Matrix, row : s64) -> *M.Row #must
 {
-	return mat.rows[row];
+	return *mat.rows[row];
 }
 
 operator + :: inline (left : $M/Matrix, right : M) -> M #must
