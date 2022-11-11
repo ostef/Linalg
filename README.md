@@ -3,7 +3,7 @@
 Linear algebra module written in Jai, for games.
 
 # Dependencies
-Linalg depends on a module named 'Math', that provides your good old trigonometry functions.
+Linalg depends on a module named 'Math', that provides your good old trigonometry and square root functions (cos, sin, tan, acos, asin, atan2, sqrt).
 It also depends on my [Fmt module](https://github.com/ostef/jai-fmt).
 
 # Coordinate system

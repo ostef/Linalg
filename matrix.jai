@@ -942,7 +942,7 @@ mat4d_perspective_projection :: #bake_constants mat4_perspective_projection (T =
 mat4_perspective_projection :: inline (fov_in_degrees : $T, aspect : T, n : T, f : T, left_handed := true) -> Mat4 (T) #must
 {
 	view_z := ifx left_handed then cast (T) 1 else cast (T) -1;
-	t := tan (to_rads (fov_in_degrees) * 0.5) * n;
+	t := math.tan (to_rads (fov_in_degrees) * 0.5) * n;
 	b := -t;
 	r := aspect * t;
 	l := -r;

@@ -70,7 +70,7 @@ Vec4l :: Vec4 (s64);
 // more dimensions, but I'm not sure.
 angle :: inline (a : $V/Vector, b : V) -> V.F #must
 {
-	denominator := sqrt (dot (a, a) * dot (b, b));
+	denominator := math.sqrt (dot (a, a) * dot (b, b));
 	if approx_zero (denominator)
 		return 0;
 	d := clamp (dot (a, b) / denominator, -1, 1);
@@ -119,7 +119,7 @@ sqrd_length :: inline (vec : $V/Vector) -> V.F #must
 
 length :: inline (vec : $V/Vector) -> V.F #must
 {
-	return sqrt (cast (V.F) dot (vec, vec));
+	return math.sqrt (cast (V.F) dot (vec, vec));
 }
 
 normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.00001) -> V #must, len : V.F
