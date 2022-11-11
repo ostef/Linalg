@@ -70,7 +70,7 @@ Vec4l :: Vec4 (s64);
 // more dimensions, but I'm not sure.
 angle :: inline (a : $V/Vector, b : V) -> V.F #must
 {
-	denominator := sqrt (dot (a, a) * dot (b, b));
+	denominator := math.sqrt (dot (a, a) * dot (b, b));
 	if approx_zero (denominator)
 		return 0;
 	d := clamp (dot (a, b) / denominator, -1, 1);
@@ -86,9 +86,9 @@ scale :: inline (left : $V/Vector, right : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = left.n[{0}] * right.n[{0}];", i);
+		println_to_builder (*builder, "result.n[%1] = left.n[%1] * right.n[%1];", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -102,13 +102,13 @@ dot :: inline (left : $V/Vector, right : V) -> V.T #must
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
 	{
-		print_to_builder (*builder, "left.n[{0}] * right.n[{0}]", i);
+		print_to_builder (*builder, "left.n[%1] * right.n[%1]", i);
 		if i != V.N - 1
 			print_to_builder (*builder, " + ");
 	}
 	println_to_builder (*builder, ";");
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 }
 
@@ -119,7 +119,7 @@ sqrd_length :: inline (vec : $V/Vector) -> V.F #must
 
 length :: inline (vec : $V/Vector) -> V.F #must
 {
-	return sqrt (cast (V.F) dot (vec, vec));
+	return math.sqrt (cast (V.F) dot (vec, vec));
 }
 
 normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.00001) -> V #must, len : V.F
@@ -139,9 +139,9 @@ clamp :: inline (vec : $V/Vector, min : V, max : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = clamp (vec.n[{0}], min.n[{0}], max.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = clamp (vec.n[%1], min.n[%1], max.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -155,9 +155,9 @@ round :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = round (vec.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = round (vec.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -171,9 +171,9 @@ floor :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = floor (vec.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = floor (vec.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -187,9 +187,9 @@ ceil :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = ceil (vec.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = ceil (vec.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -203,9 +203,9 @@ min :: inline (a : $V/Vector, b : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = min (a.n[{0}], b.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = min (a.n[%1], b.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -219,9 +219,9 @@ max :: inline (a : $V/Vector, b : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = max (a.n[{0}], b.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = max (a.n[%1], b.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -235,9 +235,9 @@ abs :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = abs (vec.n[{0}]);", i);
+		println_to_builder (*builder, "result.n[%1] = abs (vec.n[%1]);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -252,9 +252,9 @@ lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = lerp (a.n[{0}], b.n[{0}], t);", i);
+		println_to_builder (*builder, "result.n[%1] = lerp (a.n[%1], b.n[%1], t);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -293,9 +293,9 @@ add :: inline (left : $V/Vector, right : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = left.n[{0}] + right.n[{0}];", i);
+		println_to_builder (*builder, "result.n[%1] = left.n[%1] + right.n[%1];", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -309,9 +309,9 @@ sub :: inline (left : $V/Vector, right : V) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = left.n[{0}] - right.n[{0}];", i);
+		println_to_builder (*builder, "result.n[%1] = left.n[%1] - right.n[%1];", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -327,9 +327,9 @@ neg :: inline (vec : $V/Vector) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = -vec.n[{0}];", i);
+		println_to_builder (*builder, "result.n[%1] = -vec.n[%1];", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -344,9 +344,9 @@ mul :: inline (left : $V/Vector, right : $T) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = cast (V.T) (left.n[{0}] * right);", i);
+		println_to_builder (*builder, "result.n[%1] = cast (V.T) (left.n[%1] * right);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -361,9 +361,9 @@ div :: inline (left : $V/Vector, right : $T) -> V #must
 	builder : String_Builder;
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
-		println_to_builder (*builder, "result.n[{0}] = cast (V.T) (left.n[{0}] / right);", i);
+		println_to_builder (*builder, "result.n[%1] = cast (V.T) (left.n[%1] / right);", i);
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 
 	return result;
@@ -377,13 +377,13 @@ equals :: inline (left : $V/Vector, right : V) -> bool #must
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
 	{
-		print_to_builder (*builder, "left.n[{0}] == right.n[{0}]", i);
+		print_to_builder (*builder, "left.n[%1] == right.n[%1]", i);
 		if i != V.N - 1
 			print_to_builder (*builder, " && ");
 	}
 	println_to_builder (*builder, ";");
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 }
 
@@ -395,13 +395,13 @@ approx_zero :: inline (vec : $V/Vector, epsilon : V.F) -> bool #must
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
 	{
-		print_to_builder (*builder, "approx_zero (vec.n[{0}], epsilon)", i);
+		print_to_builder (*builder, "approx_zero (vec.n[%1], epsilon)", i);
 		if i != V.N - 1
 			print_to_builder (*builder, " && ");
 	}
 	println_to_builder (*builder, ";");
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 }
 
@@ -413,13 +413,13 @@ approx_equals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #mu
 	builder.allocator = context.allocator;
 	for i : 0..V.N - 1
 	{
-		print_to_builder (*builder, "approx_equals (left.n[{0}], right.n[{0}], epsilon)", i);
+		print_to_builder (*builder, "approx_equals (left.n[%1], right.n[%1], epsilon)", i);
 		if i != V.N - 1
 			print_to_builder (*builder, " && ");
 	}
 	println_to_builder (*builder, ";");
 
-	return to_string (builder);
+	return to_string (*builder);
 };
 }
 

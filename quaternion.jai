@@ -141,7 +141,7 @@ quat_from_matrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
 		}
 	}
 
-	return result * 0.5 / sqrt (t);
+	return result * 0.5 / math.sqrt (t);
 }
 
 to_axis_angle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{ 1, 0, 0 }, epsilon : Q.T = 0.00001) -> axis : Q.V3, angle : Q.T
@@ -163,7 +163,7 @@ dot :: inline (left : $Q/Quat, right : Q) -> Q.T #must
 
 length :: inline (q : $Q/Quat) -> Q.T #must
 {
-	return sqrt (dot (q, q));
+	return math.sqrt (dot (q, q));
 }
 
 normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) -> Q #must, len : Q.T
