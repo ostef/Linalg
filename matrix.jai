@@ -107,8 +107,8 @@ matrix_from_axis_angle :: inline ($M : s64, $N : s64, axis : Vec3 ($T), angle : 
 	#assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
 	n := normalized (axis);
-	s := sin (angle);
-	c := cos (angle);
+	s := math.sin (angle);
+	c := math.cos (angle);
 	c2 := 1 - c;
 
 	result : Matrix (T, M, N);

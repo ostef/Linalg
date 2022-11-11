@@ -25,18 +25,18 @@ euler_angles_from_quat :: inline (q : $Q/Quat) -> Euler_Angles (Q.T) #must
 	// Yaw
 	siny_cosp :=     2 * (q.w * q.y + q.z * q.x);
 	cosy_cosp := 1 - 2 * (q.x * q.x + q.y * q.y);
-	result.yaw = atan2 (siny_cosp, cosy_cosp);
+	result.yaw = math.atan2 (siny_cosp, cosy_cosp);
 
 	// Pitch
 	sinp := 2 * (q.w * q.x - q.y * q.z);
 	     if sinp >=  1 then result.pitch =  PI / 2; 
 	else if sinp <= -1 then result.pitch = -PI / 2;
-	else                    result.pitch = asin (sinp); 
+	else                    result.pitch = math.asin (sinp); 
 
 	// Roll
 	sinr_cosp :=     2 * (q.w * q.z + q.x * q.y);
 	cosr_cosp := 1 - 2 * (q.z * q.z + q.x * q.x);
-	result.roll = atan2 (sinr_cosp, cosr_cosp);
+	result.roll = math.atan2 (sinr_cosp, cosr_cosp);
 
 	return result;
 }

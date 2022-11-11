@@ -2,7 +2,7 @@
 // I've moved a lot of the math functions from my Math module
 // to utils.jai so that users can use any Math module, since
 // any sensible Math module should provide trigonometry.
-#import "Math";
+math :: #import "Math";
 #import "Fmt";
 
 #load "utils.jai";

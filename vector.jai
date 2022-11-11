@@ -75,7 +75,7 @@ angle :: inline (a : $V/Vector, b : V) -> V.F #must
 		return 0;
 	d := clamp (dot (a, b) / denominator, -1, 1);
 
-	return acos (d);
+	return math.acos (d);
 }
 
 scale :: inline (left : $V/Vector, right : V) -> V #must
@@ -506,8 +506,8 @@ vec2l :: inline (x : s64, y : s64) -> Vec2l #must
 
 rotate :: inline (v : $V/Vec2, theta : V.F) -> V #must
 {
-	c := cos (theta);
-	s := sin (theta);
+	c := math.cos (theta);
+	s := math.sin (theta);
 
 	return vec2 (cast (V.T) (v.x * c - v.y * s), cast (V.T) (v.x * s + v.y * c));
 }

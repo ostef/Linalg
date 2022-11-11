@@ -76,7 +76,7 @@ quat_from_forward_up :: inline (forward : Vec3 ($T), up : Vec3 (T)) -> Quat (T) 
 		return quat_from_axis_angle (u, PI);
 	else if approx_equals (d, 1, 0.00001)
 		return Quat (T).{};
-	angle := acos (d);
+	angle := math.acos (d);
 	axis := cross (context.coordinate_axes.forward, f);
 	axis = normalized (axis);
 
@@ -88,8 +88,8 @@ quatd_from_axis_angle :: #bake_constants quat_from_axis_angle (T = f64);
 quat_from_axis_angle :: inline (axis : Vector ($T, 3), angle : T) -> Quat (T) #must
 {
 	a := normalized (axis);
-	c := cos (angle / 2.0);
-	s := sin (angle / 2.0);
+	c := math.cos (angle / 2.0);
+	s := math.sin (angle / 2.0);
 
 	return quat (a.x * s, a.y * s, a.z * s, c);
 }
@@ -147,8 +147,8 @@ quat_from_matrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
 to_axis_angle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{ 1, 0, 0 }, epsilon : Q.T = 0.00001) -> axis : Q.V3, angle : Q.T
 {
 	w     := clamp (q.w, -1, 1);
-	theta := acos (w);
-	sint  := sin (theta);
+	theta := math.acos (w);
+	sint  := math.sin (theta);
 	theta *= 2;
 	if approx_zero (sint, epsilon)
 		return fallback_axis, theta;
@@ -191,7 +191,7 @@ conjugate :: inline (q : $Q/Quat) -> Q #must
 
 angle :: inline (q : $Q/Quat) -> Q.T #must
 {
-	return acos (q.w) * 2;
+	return math.acos (q.w) * 2;
 }
 
 angle :: inline (a : $Q/Quat, b : Q) -> Q.T #must
