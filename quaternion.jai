@@ -12,7 +12,7 @@ Quat :: struct (T : Type)
 	#place w;
 	scalar : T = ---;
 
-	#place y;
+	#place x;
 	as_vec4 : Vec4 (T) = ---;
 
 	#place x;
