@@ -12,7 +12,7 @@ Quat :: struct (T : Type)
 	#place w;
 	scalar : T = ---;
 
-	#place y;
+	#place x;
 	as_vec4 : Vec4 (T) = ---;
 
 	#place x;
@@ -113,7 +113,7 @@ quat_from_matrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
 
 	result : Quat (T) = ---;
 	t : T = ---;
-	
+
 	if mat.r2c2 < 0
 	{
 		if mat.r0c0 > mat.r1c1
@@ -201,7 +201,7 @@ angle :: inline (a : $Q/Quat, b : Q) -> Q.T #must
 
 rotate :: inline (vec : $V/Vec3, q : Quat (V.T)) -> V #must
 {
-	return (q * quat (vec, 0) * inverse (q)).vec;
+	return (q * quat (vec, 0) * conjugate (q)).vec;
 }
 
 right_vector :: inline (q : $Q/Quat) -> Vec3 (Q.T) #must

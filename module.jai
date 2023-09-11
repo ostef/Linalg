@@ -1,3 +1,8 @@
+// @Note (stefan): We import Math for trig functions and sqrt.
+// I've moved a lot of the math functions from my Math module
+// to utils.jai so that users can use any Math module, since
+// any sensible Math module should provide trigonometry.
+
 #scope_module
 
 math :: #import "Math";

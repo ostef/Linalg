@@ -26,10 +26,16 @@ else
 {
 	#place x;
 	xy : Vector (T, 2);
+
+	#place x;
+	r, g, b : T;
 }
 
 #if N > 3
 {
+	#place b;
+	a : T;
+
 	#place y;
 	yz : Vector (T, 2);
 	#place z;
@@ -639,7 +645,7 @@ right_to_orthonormal_basis :: inline (right : $V/Vec3, base_axes := context.coor
 	}
 	else
 		forward = cross (right, up);
-	
+
 	return normalized (up), normalized (forward);
 }
 
@@ -654,7 +660,7 @@ up_to_orthonormal_basis :: inline (up : $V/Vec3, base_axes := context.coordinate
 	}
 	else
 		forward = cross (right, up);
-	
+
 	return normalized (right), normalized (forward);
 }
 
@@ -669,7 +675,7 @@ forward_to_orthonormal_basis :: inline (forward : $V/Vec3, base_axes := context.
 	}
 	else
 		up = cross (forward, right);
-	
+
 	return normalized (right), normalized (up);
 }
 
