@@ -77,7 +77,7 @@ Vec4l :: Vec4 (s64);
 angle :: inline (a : $V/Vector, b : V) -> V.F #must
 {
 	denominator := math.sqrt (dot (a, a) * dot (b, b));
-	if approx_zero (denominator)
+	if approx_zero (denominator, 0.00001)
 		return 0;
 	d := clamp (dot (a, b) / denominator, -1, 1);
 
