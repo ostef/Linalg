@@ -33,7 +33,7 @@ else
 
 #if N > 3
 {
-	#place b;
+	#place w;
 	a : T;
 
 	#place y;
