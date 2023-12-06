@@ -181,7 +181,7 @@ inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q #must
 	if approx_zero (sqrd_length, epsilon)
 		return q;
 
-	return quat (-q.x, -q.y, -q.z, -q.w) / sqrd_length;
+	return quat (-q.x, -q.y, -q.z, q.w) / sqrd_length;
 }
 
 conjugate :: inline (q : $Q/Quat) -> Q #must
