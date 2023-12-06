@@ -2,10 +2,6 @@
 
 Linear algebra module written in Jai, for games.
 
-# Dependencies
-Linalg (no-fmt) depends only on the modules shipped with the Jai compiler.
-Only Basic and Math are imported, for String_Builder and trigonometry functions.
-
 # Coordinate system
 There is a `Coordinate_Axes` struct, that holds a right, up and forward vector. A variable named `coordinate_axes` is in the Context as well.
 Some functions take a `Coordinate_Axes` as parameter, defaulting to `context.coordinate_axes`, that let you specify what vectors the function should use as coordinate axes.
