@@ -8,17 +8,7 @@ EulerAngles :: struct (T := f32)
     n : [3]T;
 }
 
-euler_angles :: inline (yaw : $T, pitch : T, roll : T) -> EulerAngles (T) #must
-{
-    result : EulerAngles (T) = ---;
-    result.yaw = yaw;
-    result.pitch = pitch;
-    result.roll = roll;
-
-    return result;
-}
-
-euler_angles_from_quat :: inline (q : $Q/Quat) -> EulerAngles (Q.T) #must
+EulerAnglesFromQuat :: inline (q : $Q/Quat) -> EulerAngles (Q.T) #must
 {
     result : EulerAngles (Q.T) = ---;
 
