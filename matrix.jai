@@ -597,7 +597,7 @@ RightVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol (mat, 0);
 
-    return Normalized (MakeVec3 (result.x, result.y, result.z));
+    return Normalized (result.xyz);
 }
 
 UpVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
@@ -605,7 +605,7 @@ UpVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol (mat, 1);
 
-    return Normalized (MakeVec3 (result.x, result.y, result.z));
+    return Normalized (result.xyz);
 }
 
 ForwardVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
@@ -613,7 +613,7 @@ ForwardVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol (mat, 2);
 
-    return Normalized (MakeVec3 (result.x, result.y, result.z));
+    return Normalized (result.xyz);
 }
 
 ScaleVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
