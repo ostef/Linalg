@@ -89,6 +89,8 @@ else
 }
 }
 
+#scope_export
+
 ApproxZero :: inline (val : $T, epsilon : $T2) -> bool #must
 #modify {
     return IsNumeric (T) && IsFloatingPoint (T2), "T must be numeric, T2 must be a float type.";
@@ -110,6 +112,8 @@ ApproxEquals :: inline (left : $T, right : T, epsilon : $T2) -> bool #must
 else
     return left == right;
 }
+
+#scope_module
 
 ToRads :: inline (angle_in_degrees : $T) -> T #must
 #modify { return IsFloatingPoint (T), "T must be a float type."; }
