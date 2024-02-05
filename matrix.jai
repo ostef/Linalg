@@ -431,10 +431,14 @@ ApproxZero :: inline (mat : $M/Matrix, epsilon : M.T) -> bool #must
     builder.allocator = context.allocator;
     for i : 0..M.M - 1
     {
-        print_to_builder (*builder, "ApproxZero (mat.rows[%1], epsilon)", i);
-        if i != V.N - 1
-            print_to_builder (*builder, " && ");
+        for j : 0..M.N - 1
+        {
+            if i > 0 || j > 0
+                print_to_builder (*builder, " && ");
+            print_to_builder (*builder, "ApproxZero (left.r%1c%2, epsilon)", i, j);
+        }
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -447,12 +451,16 @@ ApproxEquals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool #mus
 {
     builder : String_Builder;
     builder.allocator = context.allocator;
-    for i : 0..V.N - 1
+    for i : 0..M.M - 1
     {
-        print_to_builder (*builder, "ApproxEquals (left.rows[%1], right.rows[%1], epsilon)", i);
-        if i != V.N - 1
-            print_to_builder (*builder, " && ");
+        for j : 0..M.N - 1
+        {
+            if i > 0 || j > 0
+                print_to_builder (*builder, " && ");
+            print_to_builder (*builder, "ApproxEquals (left.r%1c%2, right.r%1c%2, epsilon)", i, j);
+        }
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -617,6 +625,7 @@ ForwardVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 }
 
 ScaleVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
+#deprecated "This function only works for positive scale. It is very incomplete."
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result : Vector (M.T, 3) = ---;
@@ -847,6 +856,13 @@ Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f :
     };
 }
 
+Mat4fTransformSRT :: #bake_constants Mat4TransformSRT (T = f32);
+Mat4dTransformSRT :: #bake_constants Mat4TransformSRT (T = f64);
+Mat4TransformSRT :: inline (position : Vec3 ($T), rotation : Quat (T), scale : Vec3 (T)) -> Mat4 (T) #must
+{
+    return Mat4Translate (position) * Mat4FromQuat (rotation) * Mat4Scale (scale);
+}
+
 TranslationVector :: inline (mat : $M/Matrix) -> Vector (M.T, 3) #must
 {
     #assert M.M >= 3 && M.N >= 4 "Invalid dimensions for matrix (need at least 3 rows and 4 columns).";
@@ -891,7 +907,7 @@ Inverse :: inline (mat : Matrix ($T, 4, 4), epsilon : T = 0.00001) -> Matrix (T,
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-adjugate :: inline (mat : $M/Mat4) -> M #must
+Adjugate :: inline (mat : $M/Mat4) -> M #must
 {
     a := GetCol (mat, 0).xyz;
     b := GetCol (mat, 1).xyz;
@@ -921,7 +937,7 @@ adjugate :: inline (mat : $M/Mat4) -> M #must
     );
 }
 
-determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
+Determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
 {
     a := GetCol (mat, 0).xyz;
     b := GetCol (mat, 1).xyz;
