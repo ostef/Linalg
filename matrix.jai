@@ -819,8 +819,8 @@ Mat4LookAt :: inline (position : Vec3 ($T), target : Vec3 (T), up : Vec3 (T)) ->
     }
 
     direction := Normalized (target - position, fallback = V.{ 0, 0, 1 });
-    UpVector := Normalized (up, fallback = V.{ 0, 1, 0 });
-    result := AlignZ (direction, UpVector);
+    up_vector := Normalized (up, fallback = V.{ 0, 1, 0 });
+    result := AlignZ (direction, up_vector);
     SetCol (*result, 3, MakeVec4 (position, 1));
 
     return result;
