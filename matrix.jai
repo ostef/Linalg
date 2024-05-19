@@ -36,7 +36,7 @@ Matrix :: struct (T : Type, M : s64, N : s64)
                 print_to_builder (*builder, "r%c% : T = 1; ", i, j);
             else
                 print_to_builder (*builder, "r%c% : T; ", i, j);
-        println_to_builder (*builder, "@Fmt_Newline");
+        print_to_builder (*builder, "\n");
     }
     println_to_builder (*builder, "#place r0c0;");
     for i : 0..M - 1
