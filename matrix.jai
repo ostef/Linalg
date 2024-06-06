@@ -640,9 +640,16 @@ RotationMatrix :: inline (mat : $M/Matrix) -> M #must
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result : M;
-    SetCol (*result, 0, Normalized (RightVector (mat)));
-    SetCol (*result, 1, Normalized (UpVector (mat)));
-    SetCol (*result, 2, Normalized (ForwardVector (mat)));
+
+    col : M.Col;
+    (cast (*Vec3 (M.T)) *col).* = Normalized (RightVector (mat));
+    SetCol (*result, 0, col);
+
+    (cast (*Vec3 (M.T)) *col).* = Normalized (UpVector (mat));
+    SetCol (*result, 1, col);
+
+    (cast (*Vec3 (M.T)) *col).* = Normalized (ForwardVector (mat));
+    SetCol (*result, 2, col);
 
     return result;
 }
