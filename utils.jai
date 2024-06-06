@@ -123,6 +123,21 @@ ToRads :: inline (angle_in_degrees : $T) -> T #must
 
 // Type traits
 
+SharesSameSourcePolymorph :: inline (info : *Type_Info_Struct, of : *Type_Info_Struct) -> bool #must
+{
+    while info && info.polymorph_source_struct
+    {
+        info = info.polymorph_source_struct;
+    }
+
+    while of && of.polymorph_source_struct
+    {
+        of = of.polymorph_source_struct;
+    }
+
+    return info && info == of;
+}
+
 Devariantize :: inline (info : *Type_Info) -> *Type_Info #must
 {
     if info.type == .VARIANT

@@ -56,6 +56,105 @@ MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> 
     return .{ToVector (right), ToVector (up), ToVector (forward)};
 }
 
+IsVectorType :: inline (info : *Type_Info) -> bool #must
+{
+    return GetVectorTypeInfo (info);
+}
+
+IsQuaternionType :: inline (info : *Type_Info) -> bool #must
+{
+    return GetQuaternionTypeInfo (info);
+}
+
+IsMatrixType :: inline (info : *Type_Info) -> bool #must
+{
+    return GetMatrixTypeInfo (info);
+}
+
+GetQuaternionTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type_Info
+{
+    if info.type != .STRUCT
+        return false, null;
+
+    struct_info := cast (*Type_Info_Struct) info;
+    if !SharesSameSourcePolymorph (struct_info, type_info (Quatf))
+        return false, null;
+
+    for struct_info.specified_parameters
+    {
+        if !(it.flags & .CONSTANT)
+            continue;
+
+        ptr := struct_info.constant_storage.data + it.offset_into_constant_storage;
+        if it.name == "T"
+            return true, (cast (**Type_Info) ptr).*;
+    }
+
+    return false, null;
+}
+
+GetVectorTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type_Info, N : int
+{
+    if info.type != .STRUCT
+        return false, null, 0;
+
+    struct_info := cast (*Type_Info_Struct) info;
+
+    if !SharesSameSourcePolymorph (struct_info, type_info (Vec3f))
+        return false, null, 0, ;
+
+    T : *Type_Info;
+    N : int;
+    for struct_info.specified_parameters
+    {
+        if !(it.flags & .CONSTANT)
+            continue;
+
+        ptr := struct_info.constant_storage.data + it.offset_into_constant_storage;
+        if it.name ==
+        {
+        case "N";
+            N = (cast (*int) ptr).*;
+        case "T";
+            T = (cast (**Type_Info) ptr).*;
+        }
+    }
+
+    return true, T, N;
+}
+
+GetMatrixTypeInfo :: (info : *Type_Info) -> is_matrix_type : bool, T : *Type_Info, M : int, N : int
+{
+    if info.type != .STRUCT
+        return false, null, 0, 0;
+
+    struct_info := cast (*Type_Info_Struct) info;
+    if !SharesSameSourcePolymorph (struct_info, type_info (Mat3f))
+        return false, null, 0, 0;
+
+    T : *Type_Info;
+    M : int;
+    N : int;
+    for struct_info.specified_parameters
+    {
+        if !(it.flags & .CONSTANT)
+            continue;
+
+        ptr := struct_info.constant_storage.data + it.offset_into_constant_storage;
+        if it.name ==
+        {
+        case "M";
+            M = (cast (*int) ptr).*;
+        case "N";
+            N = (cast (*int) ptr).*;
+        case "T";
+            T = (cast (**Type_Info) ptr).*;
+        }
+    }
+
+    return true, T, M, N;
+}
+
 #scope_module
 
 f32 :: float32;
