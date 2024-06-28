@@ -858,6 +858,24 @@ Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f :
     return Mat4 (T).{
         2 * n / (r - l),               0, -view_z * (r + l) / (r - l),      0,
                       0, 2 * n / (t - b), -view_z * (t + b) / (t - b),      0,
+                      0,               0,  view_z * (f + n) / (f - n), -(2 * f * n) / (f - n),
+                      0,               0,                      view_z,      0
+    };
+}
+
+Mat4fInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection (T = f32);
+Mat4dInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection (T = f64);
+Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, left_handed := true) -> Mat4 (T) #must
+{
+    view_z := ifx left_handed then cast (T) 1 else cast (T) -1;
+    t := math.tan (ToRads (fov_in_degrees) * 0.5) * n;
+    b := -t;
+    r := aspect * t;
+    l := -r;
+
+    return Mat4 (T).{
+        2 * n / (r - l),               0, -view_z * (r + l) / (r - l),      0,
+                      0, 2 * n / (t - b), -view_z * (t + b) / (t - b),      0,
                       0,               0,                      view_z, -2 * n,
                       0,               0,                      view_z,      0
     };
