@@ -123,7 +123,7 @@ QuatFromMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
     return Normalized (result * 0.5 / math.sqrt (t));
 }
 
-ToAxisAngle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{ 1, 0, 0 }, epsilon : Q.T = 0.00001) -> axis : Q.V3, angle : Q.T
+ToAxisAngle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{0,0,1}, epsilon : Q.T = 0.00001) -> axis : Q.V3, angle : Q.T
 {
     w     := Clamp (q.w, -1, 1);
     theta := math.acos (w);
