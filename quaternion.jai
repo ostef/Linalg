@@ -123,6 +123,33 @@ QuatFromMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
     return Normalized (result * 0.5 / math.sqrt (t));
 }
 
+QuatfFromVectorToVector :: #bake_constants QuatFromVectorToVector (T = f32);
+QuatdFromVectorToVector :: #bake_constants QuatFromVectorToVector (T = f64);
+QuatFromVectorToVector :: (a : Vec3 ($T), b : Vec3 (T)) -> Quat (T) #must
+{
+    a_norm := Normalized (a);
+    b_norm := Normalized (b);
+
+    d := Dot (a_norm, b_norm);
+
+    // If a and b are parallel then there is no rotation
+    if ApproxEquals (d, 1, 0.0001)
+        return .{};
+
+    // If a and b are opposite
+    if ApproxEquals (d, -1, 0.0001)
+    {
+        if Abs (a_norm.x) > Abs (a_norm.z)
+            return Normalized (Quat (T).{-a_norm.y, a_norm.x, 0, 0});
+        else
+            return Normalized (Quat (T).{0, -a_norm.z, a_norm.y, 0});
+    }
+
+    w := Cross (a_norm, b_norm);
+
+    return Normalized (Quat (T).{vec=w, w=d + 1});
+}
+
 ToAxisAngle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{0,0,1}, epsilon : Q.T = 0.00001) -> axis : Q.V3, angle : Q.T
 {
     w     := Clamp (q.w, -1, 1);
