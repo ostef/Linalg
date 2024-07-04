@@ -48,6 +48,25 @@ else
 
     #place x;
     n : [N]T;
+
+    #if T == float
+    {
+        #if N == 2
+        {
+            #place x;
+            #as _ : math.Vector2 = ---;
+        }
+        else #if N == 3
+        {
+            #place x;
+            #as _ : math.Vector3 = ---;
+        }
+        else #if N == 4
+        {
+            #place x;
+            #as _ : math.Vector4 = ---;
+        }
+    }
 }
 
 Vec2 :: #bake_arguments Vector (N = 2);

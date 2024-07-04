@@ -17,6 +17,12 @@ Quat :: struct (T : Type)
 
     #place x;
     n : [4]T = ---;
+
+    #if T == float
+    {
+        #place x;
+        #as _ : math.Quaternion = ---;
+    }
 }
 
 Quatf :: Quat (f32);

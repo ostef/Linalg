@@ -56,6 +56,20 @@ Matrix :: struct (T : Type, M : s64, N : s64)
     rows : [M]Row = ---;
     #place r0c0;
     n : [M][N]T = ---;
+
+    #if T == float
+    {
+        #if M == 3 && N == 3
+        {
+            #place r0c0;
+            #as _ : math.Matrix3 = ---;
+        }
+        else #if M == 4 && N == 4
+        {
+            #place r0c0;
+            #as _ : math.Matrix4 = ---;
+        }
+    }
 }
 
 Mat2   :: #bake_arguments Matrix (M = 2, N = 2);
