@@ -96,37 +96,121 @@ QuatFromMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
-    result : Quat (T) = ---;
-    t : T = ---;
+    correct_mat, _, det := PolarDecompose (mat);
+    nan, inf := math.is_nan_is_inf (det);
+    if nan || inf || det == 0
+        return .{};
+
+    correct_mat *= det;
+
+    return QuatFromOrthoNormalizedPositiveMatrix (correct_mat);
+}
+
+// From Blender source code:
+// https://github.com/blender/blender/blob/756538b4a117cb51a15e848fa6170143b6aafcd8/source/blender/blenlib/intern/math_rotation.c#L272
+// This function will fail for matrices that are not ortho normalized and positive
+QuatfFromOrthoNormalizedPositiveMatrix :: #bake_constants QuatFromOrthoNormalizedPositiveMatrix (T = f32);
+QuatdFromOrthoNormalizedPositiveMatrix :: #bake_constants QuatFromOrthoNormalizedPositiveMatrix (T = f64);
+QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
+{
+    #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
+
+    /* Caller must ensure matrices aren't negative for valid results, see: T24291, T94231. */
+    // Assert (Determinant (mat) > 0);
+
+    /* Method outlined by Mike Day, ref: https://math.stackexchange.com/a/3183435/220949
+        * with an additional `sqrtf(..)` for higher precision result.
+        * Removing the `sqrt` causes tests to fail unless the precision is set to 1e-6 or larger. */
+
+    q : Quat (T) = ---;
 
     if mat.r2c2 < 0
     {
         if mat.r0c0 > mat.r1c1
         {
-            t = 1 + mat.r0c0 - mat.r1c1 - mat.r2c2;
-            result = .{t, mat.r1c0 + mat.r0c1, mat.r0c2 + mat.r2c0, mat.r2c1 - mat.r1c2};
+            trace := 1 + mat.r0c0 - mat.r1c1 - mat.r2c2;
+            s := 2 * math.sqrt (trace);
+            if mat.r1c2 < mat.r2c1
+            {
+                /* Ensure W is non-negative for a canonical result. */
+                s = -s;
+            }
+            q.x = 0.25 * s;
+            s = 1 / s;
+            q.w = (mat.r1c2 - mat.r2c1) * s;
+            q.y = (mat.r0c1 + mat.r1c0) * s;
+            q.z = (mat.r2c0 + mat.r0c2) * s;
+            if trace == 1 && q.w == 0 && q.y == 0 && q.z == 0
+            {
+                /* Avoids the need to normalize the degenerate case. */
+                q.x = 1;
+            }
         }
         else
         {
-            t = 1 - mat.r0c0 + mat.r1c1 - mat.r2c2;
-            result = .{mat.r1c0 + mat.r0c1, t, mat.r1c2 + mat.r2c1, mat.r2c0 - mat.r0c2};
+            trace := 1 - mat.r0c0 + mat.r1c1 - mat.r2c2;
+            s := 2 * math.sqrt (trace);
+            if mat.r2c0 < mat.r0c2
+            {
+                /* Ensure W is non-negative for a canonical result. */
+                s = -s;
+            }
+            q.y = 0.25 * s;
+            s = 1 / s;
+            q.w = (mat.r2c0 - mat.r0c2) * s;
+            q.x = (mat.r0c1 + mat.r1c0) * s;
+            q.z = (mat.r1c2 + mat.r2c1) * s;
+            if trace == 1 && q.w == 0 && q.x == 0 && q.z == 0
+            {
+                /* Avoids the need to normalize the degenerate case. */
+                q.y = 1;
+            }
         }
     }
     else
     {
         if mat.r0c0 < -mat.r1c1
         {
-            t = 1 - mat.r0c0 - mat.r1c1 + mat.r2c2;
-            result = .{mat.r0c2 + mat.r2c0, mat.r2c1 + mat.r1c2, t, mat.r1c0 - mat.r0c1};
+            trace := 1 - mat.r0c0 - mat.r1c1 + mat.r2c2;
+            s := 2 * math.sqrt (trace);
+            if mat.r0c1 < mat.r1c0
+            {
+                /* Ensure W is non-negative for a canonical result. */
+                s = -s;
+            }
+            q.z = 0.25 * s;
+            s = 1 / s;
+            q.w = (mat.r0c1 - mat.r1c0) * s;
+            q.x = (mat.r2c0 + mat.r0c2) * s;
+            q.y = (mat.r1c2 + mat.r2c1) * s;
+            if trace == 1 && q.w == 0 && q.x == 0 && q.y == 0
+            {
+                /* Avoids the need to normalize the degenerate case. */
+                q.z = 1;
+            }
         }
         else
         {
-            t = 1 + mat.r0c0 + mat.r1c1 + mat.r2c2;
-            result = .{mat.r2c1 - mat.r1c2, mat.r0c2 - mat.r2c0, mat.r1c0 - mat.r0c1, t};
+            /* NOTE(@campbellbarton): A zero matrix will fall through to this block,
+                * needed so a zero scaled matrices to return a quaternion without rotation, see: T101848. */
+            trace := 1 + mat.r0c0 + mat.r1c1 + mat.r2c2;
+            s := 2 * math.sqrt (trace);
+            q.w = 0.25 * s;
+            s = 1 / s;
+            q.x = (mat.r1c2 - mat.r2c1) * s;
+            q.y = (mat.r2c0 - mat.r0c2) * s;
+            q.z = (mat.r0c1 - mat.r1c0) * s;
+            if trace == 1 && q.x == 0 && q.y == 0 && q.z == 0
+            {
+                /* Avoids the need to normalize the degenerate case. */
+                q.w = 1;
+            }
         }
     }
 
-    return Normalized (result * 0.5 / math.sqrt (t));
+    // Not sure why I need to return the conjugate, the original code returns
+    // quaternions that go in the opposite direction
+    return Conjugate (q);
 }
 
 QuatfFromVectorToVector :: #bake_constants QuatFromVectorToVector (T = f32);
@@ -187,6 +271,8 @@ Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) 
     return q * (1.0 / len), len;
 }
 
+// This is here for completeness but for valid rotation
+// quaternions (unit quaternions) the conjugate should be used
 Inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q #must
 {
     sqrd_length := Dot (q, q);
@@ -208,7 +294,7 @@ Angle :: inline (q : $Q/Quat) -> Q.T #must
 
 Angle :: inline (a : $Q/Quat, b : Q) -> Q.T #must
 {
-    return Angle (b * Inverse (a));
+    return Angle (b * Conjugate (a));
 }
 
 Rotate :: inline (vec : $V/Vec3, q : Quat (V.T)) -> V #must

@@ -23,7 +23,7 @@ Max :: (a : $T, b : T) -> T #expand
 Sign :: (val : $T) -> T #expand
 #modify { return IsNumeric (T), "T must be numeric."; }
 {
-    #if #run is_unsigned (T)
+    #if #run IsUnsigned (T)
         return cast (T) 1;
     else
         return ifx val < 0 then cast (T) -1 else cast (T) 1;
@@ -156,7 +156,7 @@ IsSigned :: inline (type : Type) -> bool #must
     return true;
 }
 
-is_unsigned :: inline (type : Type) -> bool #must
+IsUnsigned :: inline (type : Type) -> bool #must
 {
     info := cast (*Type_Info) type;
     info = Devariantize (info);
