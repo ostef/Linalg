@@ -995,3 +995,23 @@ Determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
 
     return Dot (s, v) + Dot (t, u);
 }
+
+PolarDecompose :: inline (mat : Matrix (float, $M, $N)) -> Q : Mat3f, S : Mat3f, det : float
+{
+    #assert M >= 3 && N >= 3;
+
+    mat3 := ToMat3 (mat);
+    Q, S, det := math.polar_decomp (mat3);
+
+    return .{
+            Q._11, Q._12, Q._13,
+            Q._21, Q._22, Q._23,
+            Q._31, Q._32, Q._33,
+        },
+        .{
+            S._11, S._12, S._13,
+            S._21, S._22, S._23,
+            S._31, S._32, S._33,
+        },
+        det;
+}
