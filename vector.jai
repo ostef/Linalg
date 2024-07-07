@@ -25,10 +25,10 @@ else
 #if N > 2
 {
     #place x;
-    xy : Vector (T, 2);
+    xy : Vector (T, 2) = ---;
 
     #place x;
-    r, g, b : T;
+    r, g, b : T = ---;
 }
 
 #if N > 3
@@ -37,17 +37,19 @@ else
     a : T;
 
     #place y;
-    yz : Vector (T, 2);
+    yz : Vector (T, 2) = ---;
     #place z;
-    zw : Vector (T, 2);
+    zw : Vector (T, 2) = ---;
     #place x;
-    xyz : Vector (T, 3);
+    xyz : Vector (T, 3) = ---;
     #place y;
-    yzw : Vector (T, 3);
+    yzw : Vector (T, 3) = ---;
+    #place x;
+    rgb : Vector (T, 3) = ---;
 }
 
     #place x;
-    n : [N]T;
+    n : [N]T = ---;
 
     #if T == float
     {
