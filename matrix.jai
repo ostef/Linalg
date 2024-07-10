@@ -1000,7 +1000,7 @@ PolarDecompose :: inline (mat : Matrix (float, $M, $N)) -> Q : Mat3f, S : Mat3f,
 {
     #assert M >= 3 && N >= 3;
 
-    mat3 := ToMat3 (mat);
+    mat3 := ToMat3f (mat);
     Q, S, det := math.polar_decomp (mat3);
 
     return .{
