@@ -1,13 +1,5 @@
 #scope_module
 
-IsFinite :: inline (val : $T) -> bool #must
-#modify { return IsFloatingPoint (T); }
-{
-    nan, inf := math.is_nan_is_inf (val);
-
-    return !nan && !inf;
-}
-
 Abs :: (val : $T) -> T #expand
 #modify { return IsNumeric (T), "T must be numeric."; }
 {
@@ -98,6 +90,14 @@ else
 }
 
 #scope_export
+
+IsFinite :: inline (val : $T) -> bool #must
+#modify { return IsFloatingPoint (T); }
+{
+    nan, inf := math.is_nan_is_inf (val);
+
+    return !nan && !inf;
+}
 
 ApproxZero :: inline (val : $T, epsilon : $T2) -> bool #must
 #modify {
