@@ -82,6 +82,7 @@ QuatFromAxisAngle :: inline (axis : Vector ($T, 3), angle : T) -> Quat (T) #must
 QuatfFromEulerAngles :: #bake_constants QuatFromEulerAngles (T = f32);
 QuatdFromEulerAngles :: #bake_constants QuatFromEulerAngles (T = f64);
 QuatFromEulerAngles :: inline (euler : EulerAngles ($T)) -> Quat (T) #must
+#deprecated
 {
     yaw   := QuatFromAxisAngle (Vec3 (T).{ 0, 1, 0 }, euler.yaw);
     pitch := QuatFromAxisAngle (Vec3 (T).{ 1, 0, 0 }, euler.pitch);
@@ -259,7 +260,11 @@ Dot :: inline (left : $Q/Quat, right : Q) -> Q.T #must
 
 Length :: inline (q : $Q/Quat) -> Q.T #must
 {
-    return math.sqrt (Dot (q, q));
+    s := Dot (q, q);
+    if !IsFinite (s)
+        return s;
+
+    return math.sqrt (s);
 }
 
 Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) -> Q #must, len : Q.T
@@ -421,6 +426,11 @@ ApproxZero :: inline (val : $Q/Quat, epsilon : Q.T) -> bool #must
 ApproxEquals :: inline (left : $Q/Quat, right : Q, epsilon : Q.T) -> bool #must
 {
     return ApproxEquals (left.x, right.x, epsilon) && ApproxEquals (left.y, right.y, epsilon) && ApproxEquals (left.z, right.z, epsilon) && ApproxEquals (left.w, right.w, epsilon);
+}
+
+IsFinite :: inline (val : $Q/Quat) -> bool #must
+{
+    return IsFinite (val.x) && IsFinite (val.y) && IsFinite (val.z) && IsFinite (val.w);
 }
 
 operator *[] :: inline (q : $Q/Quat, index : s64) -> *Q.T #must
