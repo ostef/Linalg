@@ -1,5 +1,13 @@
 #scope_module
 
+IsFinite :: inline (val : $T) -> bool #must
+#modify { return IsFloatingPoint (T); }
+{
+    nan, inf := math.is_nan_is_inf (val);
+
+    return !nan && !inf;
+}
+
 Abs :: (val : $T) -> T #expand
 #modify { return IsNumeric (T), "T must be numeric."; }
 {
@@ -119,6 +127,12 @@ ToRads :: inline (angle_in_degrees : $T) -> T #must
 #modify { return IsFloatingPoint (T), "T must be a float type."; }
 {
     return angle_in_degrees * PI / 180.0;
+}
+
+ToDegs :: inline (angle_in_radians : $T) -> T #must
+#modify { return IsFloatingPoint (T), "T must be a float type."; }
+{
+    return angle_in_radians * 180.0 / PI;
 }
 
 // Type traits
