@@ -146,7 +146,11 @@ SqrdLength :: inline (vec : $V/Vector) -> V.F #must
 
 Length :: inline (vec : $V/Vector) -> V.F #must
 {
-    return math.sqrt (cast (V.F) Dot (vec, vec));
+    s := cast (V.F) Dot (vec, vec);
+    if !IsFinite (s)
+        return s;
+
+    return math.sqrt (s);
 }
 
 Normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.00001) -> V #must, len : V.F
@@ -450,6 +454,24 @@ ApproxEquals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #mus
 };
 }
 
+IsFinite :: inline (vec : $V/Vector) -> bool #must
+{
+    return #insert -> string
+{
+    builder : String_Builder;
+    builder.allocator = context.allocator;
+    for i : 0..V.N - 1
+    {
+        print_to_builder (*builder, "IsFinite (val.n[%])", i);
+        if i != V.N - 1
+            print_to_builder (*builder, " && ");
+    }
+    println_to_builder (*builder, ";");
+
+    return to_string (*builder);
+};
+}
+
 operator *[] :: inline (vec : $V/Vector, index : s64) -> *V.T #must
 {
     return *vec.n[index];
@@ -619,6 +641,24 @@ ForwardToOrthonormalBasis :: inline (forward : $V/Vec3, base_axes := context.coo
         up = Cross (forward, right);
 
     return Normalized (right), Normalized (up);
+}
+
+ToDegs :: inline (v : $V/Vec3) -> V #must
+{
+    return .{
+        ToDegs (v.x),
+        ToDegs (v.y),
+        ToDegs (v.z),
+    };
+}
+
+ToRads :: inline (v : $V/Vec3) -> V #must
+{
+    return .{
+        ToRads (v.x),
+        ToRads (v.y),
+        ToRads (v.z),
+    };
 }
 
 /* Vec4 */
