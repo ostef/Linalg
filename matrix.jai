@@ -543,12 +543,12 @@ ToMat3d :: #bake_arguments Resize (T2 = f64, M2 = 3, N2 = 3);
 ToMat3 :: #bake_arguments Resize (M2 = 3, N2 = 3);
 
 MakeMat3 :: inline (
-    r0 : $V/Vec3,
-    r1 : V,
-    r2 : V
-) -> Mat3 (V.T) #must
+    r0 : Vector ($T, 3),
+    r1 : Vector (T, 3),
+    r2 : Vector (T, 3)
+) -> Mat3 (T) #must
 {
-    result : Mat3 (V.T) = ---;
+    result : Mat3 (T) = ---;
     result.r0 = r0;
     result.r1 = r1;
     result.r2 = r2;
@@ -636,18 +636,6 @@ ForwardVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
     result := GetCol (mat, 2);
 
     return Normalized (result.xyz);
-}
-
-ScaleVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
-#deprecated "This function only works for positive scale. It is very incomplete."
-{
-    #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
-    result : Vector (M.T, 3) = ---;
-    result.x = Length (RightVector (mat));
-    result.y = Length (UpVector (mat));
-    result.z = Length (ForwardVector (mat));
-
-    return result;
 }
 
 RotationMatrix :: inline (mat : $M/Matrix) -> M #must
