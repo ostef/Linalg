@@ -97,14 +97,12 @@ QuatFromMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
-    correct_mat, _, det := PolarDecompose (mat);
+    orthonormal, _, det := PolarDecompose (mat);
     nan, inf := math.is_nan_is_inf (det);
     if nan || inf || det == 0
         return .{};
 
-    correct_mat *= det;
-
-    return QuatFromOrthoNormalizedPositiveMatrix (correct_mat);
+    return QuatFromOrthoNormalizedPositiveMatrix (orthonormal);
 }
 
 // From Blender source code:
