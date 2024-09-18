@@ -614,6 +614,18 @@ Mat3fRotate :: Mat3fFromAxisAngle;
 Mat3dRotate :: Mat3dFromAxisAngle;
 Mat3Rotate :: Mat3FromAxisAngle;
 
+Mat3fScale :: #bake_constants Mat3Scale (T = f32);
+Mat3dScale :: #bake_constants Mat3Scale (T = f64);
+Mat3Scale :: inline (vec : Vec3 ($T)) -> Mat3 (T) #must
+{
+    result : Mat3 (T);
+    result.r0c0 = vec.x;
+    result.r1c1 = vec.y;
+    result.r2c2 = vec.z;
+
+    return result;
+}
+
 RightVector :: inline (mat : $M/Matrix) -> Vec3 (M.T) #must
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
