@@ -102,6 +102,9 @@ QuatFromMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Quat (T) #must
     if nan || inf || det == 0
         return .{};
 
+    if det < 0
+        orthonormal = -orthonormal;
+
     return QuatFromOrthoNormalizedPositiveMatrix (orthonormal);
 }
 
