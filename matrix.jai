@@ -668,7 +668,7 @@ RotationMatrix :: inline (mat : $M/Matrix) -> M #must
     return result;
 }
 
-Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M #must, exists : bool
+Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M #must, det : float
 {
     a := GetCol (mat, 0);
     b := GetCol (mat, 1);
@@ -682,10 +682,24 @@ Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M #must, exists : 
     inv_det := 1 / det;
 
     return MakeMat3 (
-        r0 * inv_det,
-        r1 * inv_det,
-        r2 * inv_det
-    ), !ApproxZero (det, epsilon);
+            r0 * inv_det,
+            r1 * inv_det,
+            r2 * inv_det
+        ),
+        det;
+}
+
+Determinant :: inline (mat : $M/Mat3) -> float #must
+{
+    a := GetCol (mat, 0);
+    b := GetCol (mat, 1);
+    c := GetCol (mat, 2);
+
+    r0 := Cross (b, c);
+    r1 := Cross (c, a);
+    r2 := Cross (a, b);
+
+    return Dot (r2, c);
 }
 
 /* Mat4 */
@@ -909,7 +923,7 @@ TranslationVector :: inline (mat : $M/Matrix) -> Vector (M.T, 3) #must
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-Inverse :: inline (mat : Matrix ($T, 4, 4), epsilon : T = 0.00001) -> Matrix (T, 4, 4) #must, exists : bool
+Inverse :: inline (mat : Matrix ($T, 4, 4), epsilon : T = 0.00001) -> Matrix (T, 4, 4) #must, det : float
 {
     a := GetCol (mat, 0).xyz;
     b := GetCol (mat, 1).xyz;
@@ -938,15 +952,16 @@ Inverse :: inline (mat : Matrix ($T, 4, 4), epsilon : T = 0.00001) -> Matrix (T,
     r3 := Cross (u, c) - s * z;
 
     return MakeMat4 (
-        MakeVec4 (r0, -Dot (b, t)),
-        MakeVec4 (r1,  Dot (a, t)),
-        MakeVec4 (r2, -Dot (d, s)),
-        MakeVec4 (r3,  Dot (c, s))
-    ), !ApproxZero (det, epsilon);
+            MakeVec4 (r0, -Dot (b, t)),
+            MakeVec4 (r1,  Dot (a, t)),
+            MakeVec4 (r2, -Dot (d, s)),
+            MakeVec4 (r3,  Dot (c, s))
+        ),
+        det;
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-Adjugate :: inline (mat : $M/Mat4) -> M #must
+Adjugate :: inline (mat : $M/Mat4) -> M #must, det : float
 {
     a := GetCol (mat, 0).xyz;
     b := GetCol (mat, 1).xyz;
@@ -969,11 +984,12 @@ Adjugate :: inline (mat : $M/Mat4) -> M #must
     r3 := Cross (u, c) - s * z;
 
     return MakeMat4 (
-        MakeVec4 (r0, -Dot (b, t)),
-        MakeVec4 (r1,  Dot (a, t)),
-        MakeVec4 (r2, -Dot (d, s)),
-        MakeVec4 (r3,  Dot (c, s))
-    );
+            MakeVec4 (r0, -Dot (b, t)),
+            MakeVec4 (r1,  Dot (a, t)),
+            MakeVec4 (r2, -Dot (d, s)),
+            MakeVec4 (r3,  Dot (c, s))
+        ),
+        Dot (s, v) + Dot (t, u);
 }
 
 Determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
@@ -995,6 +1011,8 @@ Determinant :: inline (mat : Matrix ($T, 4, 4)) -> T #must
 
     return Dot (s, v) + Dot (t, u);
 }
+
+// https://github.com/erich666/GraphicsGems/blob/master/gemsiv/polar_decomp/Decompose.c
 
 PolarDecompose :: inline (mat : Matrix (float, $M, $N)) -> Q : Mat3f, S : Mat3f, det : float
 {
