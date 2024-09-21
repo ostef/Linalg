@@ -117,12 +117,12 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
-    /* Caller must ensure matrices aren't negative for valid results, see: T24291, T94231. */
-    // Assert (Determinant (mat) > 0);
+    /* Caller must ensure matrices aren't negative for valid results, see: #24291, #94231. */
+    // assert (Determinant (mat) > 0);
 
     /* Method outlined by Mike Day, ref: https://math.stackexchange.com/a/3183435/220949
-        * with an additional `sqrtf(..)` for higher precision result.
-        * Removing the `sqrt` causes tests to fail unless the precision is set to 1e-6 or larger. */
+     * with an additional `sqrtf(..)` for higher precision result.
+     * Removing the `sqrt` causes tests to fail unless the precision is set to 1e-6 or larger. */
 
     q : Quat (T) = ---;
 
@@ -193,8 +193,8 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
         }
         else
         {
-            /* NOTE(@campbellbarton): A zero matrix will fall through to this block,
-                * needed so a zero scaled matrices to return a quaternion without rotation, see: T101848. */
+            /* NOTE(@ideasman42): A zero matrix will fall through to this block,
+             * needed so a zero scaled matrices to return a quaternion without rotation, see: #T101848. */
             trace := 1 + mat.r0c0 + mat.r1c1 + mat.r2c2;
             s := 2 * math.sqrt (trace);
             q.w = 0.25 * s;
@@ -209,6 +209,16 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
             }
         }
     }
+
+    assert (q.w >= 0);
+
+    /* Sometimes normalization is necessary due to round-off errors in the above
+     * calculations. The comparison here uses tighter tolerances than
+     * BLI_ASSERT_UNIT_QUAT(), so it's likely that even after a few more
+     * transformations the quaternion will still be considered unit-ish. */
+    q_len_squared := Dot (q, q);
+    if !ApproxEquals (q_len_squared, 1, 0.0005)
+        q = Normalized (q);
 
     // Not sure why I need to return the conjugate, the original code returns
     // quaternions that go in the opposite direction
