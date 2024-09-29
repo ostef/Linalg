@@ -100,6 +100,7 @@ Angle :: inline (a : $V/Vector, b : V) -> V.F #must
     denominator := math.sqrt (Dot (a, a) * Dot (b, b));
     if ApproxZero (denominator, 0.00001)
         return 0;
+
     d := Clamp (Dot (a, b) / denominator, -1, 1);
 
     return math.acos (d);
@@ -111,7 +112,7 @@ Scale :: inline (left : $V/Vector, right : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = left.n[%1] * right.n[%1];", i);
 
@@ -126,13 +127,14 @@ Dot :: inline (left : $V/Vector, right : V) -> V.T #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
     {
         print_to_builder (*builder, "left.n[%1] * right.n[%1]", i);
         if i != V.N - 1
             print_to_builder (*builder, " + ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -157,6 +159,7 @@ Normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.000
 {
     if ApproxZero (vec, epsilon)
         return fallback, 0;
+
     len := Length (vec);
 
     return vec * (1.0 / len), len;
@@ -168,7 +171,7 @@ Clamp :: inline (vec : $V/Vector, min : V, max : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Clamp (vec.n[%1], min.n[%1], max.n[%1]);", i);
 
@@ -184,7 +187,7 @@ Round :: inline (vec : $V/Vector) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Round (vec.n[%1]);", i);
 
@@ -200,7 +203,7 @@ Floor :: inline (vec : $V/Vector) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Floor (vec.n[%1]);", i);
 
@@ -216,7 +219,7 @@ Ceil :: inline (vec : $V/Vector) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Ceil (vec.n[%1]);", i);
 
@@ -232,7 +235,7 @@ Min :: inline (a : $V/Vector, b : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Min (a.n[%1], b.n[%1]);", i);
 
@@ -248,7 +251,7 @@ Max :: inline (a : $V/Vector, b : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Max (a.n[%1], b.n[%1]);", i);
 
@@ -264,7 +267,7 @@ Abs :: inline (vec : $V/Vector) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Abs (vec.n[%1]);", i);
 
@@ -281,7 +284,7 @@ Lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = Lerp (a.n[%1], b.n[%1], t);", i);
 
@@ -322,7 +325,7 @@ Add :: inline (left : $V/Vector, right : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = left.n[%1] + right.n[%1];", i);
 
@@ -338,7 +341,7 @@ Sub :: inline (left : $V/Vector, right : V) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = left.n[%1] - right.n[%1];", i);
 
@@ -356,7 +359,7 @@ Neg :: inline (vec : $V/Vector) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = -vec.n[%1];", i);
 
@@ -373,7 +376,7 @@ Mul :: inline (left : $V/Vector, right : $T) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = cast (V.T) (left.n[%1] * right);", i);
 
@@ -390,7 +393,7 @@ Div :: inline (left : $V/Vector, right : $T) -> V #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
         println_to_builder (*builder, "result.n[%1] = cast (V.T) (left.n[%1] / right);", i);
 
@@ -405,13 +408,14 @@ Equals :: inline (left : $V/Vector, right : V) -> bool #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
     {
         print_to_builder (*builder, "left.n[%1] == right.n[%1]", i);
         if i != V.N - 1
             print_to_builder (*builder, " && ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -423,13 +427,14 @@ ApproxZero :: inline (vec : $V/Vector, epsilon : V.F) -> bool #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
     {
         print_to_builder (*builder, "ApproxZero (vec.n[%1], epsilon)", i);
         if i != V.N - 1
             print_to_builder (*builder, " && ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -441,13 +446,14 @@ ApproxEquals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #mus
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
     {
         print_to_builder (*builder, "ApproxEquals (left.n[%1], right.n[%1], epsilon)", i);
         if i != V.N - 1
             print_to_builder (*builder, " && ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -459,13 +465,14 @@ IsFinite :: inline (vec : $V/Vector) -> bool #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..V.N - 1
     {
         print_to_builder (*builder, "IsFinite (val.n[%])", i);
         if i != V.N - 1
             print_to_builder (*builder, " && ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -602,13 +609,16 @@ RightToOrthonormalBasis :: inline (right : $V/Vec3, base_axes := context.coordin
 {
     up := Cross (base_axes.forward, right);
     forward : V = ---;
+
     if ApproxZero (Dot (up, up), 0.000001)
     {
         forward = Cross (right, base_axes.up);
         up = Cross (forward, right);
     }
     else
+    {
         forward = Cross (right, up);
+    }
 
     return Normalized (up), Normalized (forward);
 }
@@ -617,13 +627,16 @@ UpToOrthonormalBasis :: inline (up : $V/Vec3, base_axes := context.coordinate_ax
 {
     right := Cross (up, base_axes.forward);
     forward : V = ---;
+
     if ApproxZero (Dot (right, right), 0.000001)
     {
         forward = Cross (base_axes.right, up);
         right = Cross (up, forward);
     }
     else
+    {
         forward = Cross (right, up);
+    }
 
     return Normalized (right), Normalized (forward);
 }
@@ -632,13 +645,16 @@ ForwardToOrthonormalBasis :: inline (forward : $V/Vec3, base_axes := context.coo
 {
     right := Cross (base_axes.up, forward);
     up : V = ---;
+
     if ApproxZero (Dot (right, right), 0.000001)
     {
         up = Cross (forward, base_axes.right);
         right = Cross (up, forward);
     }
     else
+    {
         up = Cross (forward, right);
+    }
 
     return Normalized (right), Normalized (up);
 }

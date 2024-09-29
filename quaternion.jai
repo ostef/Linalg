@@ -57,10 +57,12 @@ QuatFromForwardUp :: inline (forward : Vec3 ($T), up : Vec3 (T)) -> Quat (T) #mu
     f := Normalized (forward, context.coordinate_axes.forward);
     u := Normalized (up, context.coordinate_axes.up);
     d := Dot (context.coordinate_axes.forward, f);
+
     if ApproxEquals (d, -1, 0.00001)
         return QuatFromAxisAngle (u, PI);
     else if ApproxEquals (d, 1, 0.00001)
         return Quat (T).{};
+
     angle := math.acos (d);
     axis := Cross (context.coordinate_axes.forward, f);
     axis = Normalized (axis);
@@ -137,6 +139,7 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
                 /* Ensure W is non-negative for a canonical result. */
                 s = -s;
             }
+
             q.x = 0.25 * s;
             s = 1 / s;
             q.w = (mat.r1c2 - mat.r2c1) * s;
@@ -157,6 +160,7 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
                 /* Ensure W is non-negative for a canonical result. */
                 s = -s;
             }
+
             q.y = 0.25 * s;
             s = 1 / s;
             q.w = (mat.r2c0 - mat.r0c2) * s;
@@ -180,6 +184,7 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix ($T, $M, $N)) -> Q
                 /* Ensure W is non-negative for a canonical result. */
                 s = -s;
             }
+
             q.z = 0.25 * s;
             s = 1 / s;
             q.w = (mat.r0c1 - mat.r1c0) * s;
@@ -282,6 +287,7 @@ Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) 
 {
     if ApproxZero (q, epsilon)
         return fallback, 0;
+
     len := Length (q);
 
     return q * (1.0 / len), len;

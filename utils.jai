@@ -163,10 +163,13 @@ IsSigned :: inline (type : Type) -> bool #must
 {
     info := cast (*Type_Info) type;
     info = Devariantize (info);
+
     if info.type != .INTEGER && info.type != .FLOAT
         return false;
+
     if info.type == .INTEGER
         return (cast (*Type_Info_Integer) info).signed;
+
     return true;
 }
 
@@ -174,8 +177,10 @@ IsUnsigned :: inline (type : Type) -> bool #must
 {
     info := cast (*Type_Info) type;
     info = Devariantize (info);
+
     if info.type != .INTEGER
         return false;
+
     return !(cast (*Type_Info_Integer) info).signed;
 }
 
@@ -183,8 +188,10 @@ IsNumeric :: inline (type : Type) -> bool #must
 {
     info := cast (*Type_Info) type;
     info = Devariantize (info);
+
     if info.type != .FLOAT && info.type != .INTEGER
         return false;
+
     return true;
 }
 
@@ -192,8 +199,10 @@ IsFloatingPoint :: inline (type : Type) -> bool #must
 {
     info := cast (*Type_Info) type;
     info = Devariantize (info);
+
     if info.type != .FLOAT
         return false;
+
     return true;
 }
 

@@ -28,17 +28,22 @@ Matrix :: struct (T : Type, M : s64, N : s64)
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M - 1
     {
         for j : 0..N - 1
+        {
             if i == j
                 print_to_builder (*builder, "r%c% : T = 1; ", i, j);
             else
                 print_to_builder (*builder, "r%c% : T; ", i, j);
+        }
+
         print_to_builder (*builder, "\n");
     }
+
     println_to_builder (*builder, "#place r0c0;");
+
     for i : 0..M - 1
     {
         for j : 0..N - 1
@@ -46,9 +51,13 @@ Matrix :: struct (T : Type, M : s64, N : s64)
             print_to_builder (*builder, "c%r% : T = ---; ", j, i);
         }
     }
+
     println_to_builder (*builder, "#place r0c0;");
+
     for i : 0..M - 1
+    {
         println_to_builder (*builder, "r% : Row = ---;", i);
+    }
 
     return to_string (*builder);
 };
@@ -183,9 +192,11 @@ GetCol :: inline (mat : $M/Matrix, index : s64) -> M.Col #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         println_to_builder (*builder, "result.n[%1] = mat.n[%1][index];", i);
+    }
 
     return to_string (*builder);
 };
@@ -198,9 +209,11 @@ SetCol :: inline (mat : *$M/Matrix, index : s64, col : M.Col)
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         println_to_builder (*builder, "mat.n[%1][index] = col.n[%1];", i);
+    }
 
     return to_string (*builder);
 };
@@ -212,10 +225,14 @@ Transposed :: inline (mat : $M/Matrix) -> M.Transposed #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         for j : 0..M.N - 1
+        {
             println_to_builder (*builder, "result.n[%2][%1] = mat.n[%1][%2];", i, j);
+        }
+    }
 
     return to_string (*builder);
 };
@@ -228,22 +245,20 @@ Resize :: inline (mat : $M/Matrix, $T2 : Type, $M2 : s64, $N2 : s64) -> Matrix (
     #assert #run IsNumeric (T2) "T2 needs to be a numeric type.";
     #assert M2 > 0 && N2 > 0 "Invalid matrix dimensions.";
 
-    result : Matrix (T2, M2, N2) = ---;
+    result : Matrix (T2, M2, N2);
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     m := ifx M2 < M.M then M2 else M.M;
     n := ifx N2 < M.N then N2 else M.N;
     for i : 0..m - 1
+    {
         for j : 0..n - 1
+        {
             println_to_builder (*builder, "result.n[%1][%2] = cast (T2) mat.n[%1][%2];", i, j);
-    for i : m..M2 - 1
-        for j : n..N2 - 1
-            if i == j
-                println_to_builder (*builder, "result.n[%][%] = 1;", i, j);
-            else
-                println_to_builder (*builder, "result.n[%][%] = 0;", i, j);
+        }
+    }
 
     return to_string (*builder);
 };
@@ -257,10 +272,14 @@ Add :: inline (left : $M/Matrix, right : M) -> M #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         for j : 0..M.N - 1
+        {
             println_to_builder (*builder, "result.n[%1][%2] = right.n[%1][%2] + left.n[%1][%2];", i, j);
+        }
+    }
 
     return to_string (*builder);
 
@@ -275,10 +294,14 @@ Sub :: inline (left : $M/Matrix, right : M) -> M #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         for j : 0..M.N - 1
+        {
             println_to_builder (*builder, "result.n[%1][%2] = right.n[%1][%2] - left.n[%1][%2];", i, j);
+        }
+    }
 
     return to_string (*builder);
 
@@ -295,10 +318,14 @@ Neg :: inline (mat : $M/Matrix) -> M #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         for j : 0..M.N - 1
+        {
             println_to_builder (*builder, "result.n[%1][%2] = -mat.n[%1][%2];", i, j);
+        }
+    }
 
     return to_string (*builder);
 
@@ -314,9 +341,11 @@ Mul :: inline (left : $M/Matrix, right : $T) -> M #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         println_to_builder (*builder, "result.rows[%1] = left.rows[%1] * right;", i);
+    }
 
     return to_string (*builder);
 };
@@ -330,16 +359,18 @@ Mul :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
     {
         print_to_builder (*builder, "result.n[%] = ", i);
+
         for k : 0..M.N - 1
         {
             print_to_builder (*builder, "left.n[%1][%2] * right.n[%2]", i, k);
             if k != M.N - 1
                 print_to_builder (*builder, " + ");
         }
+
         println_to_builder (*builder, ";");
     }
 
@@ -355,16 +386,18 @@ Mul :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for j : 0..M.N - 1
     {
         print_to_builder (*builder, "result.n[%] = ", j);
+
         for k : 0..M.M - 1
         {
             print_to_builder (*builder, "left.n[%1] * right.n[%1][%2]", k, j);
             if k != M.M - 1
                 print_to_builder (*builder, " + ");
         }
+
         println_to_builder (*builder, ";");
     }
 
@@ -380,18 +413,20 @@ Mul :: inline (left : Matrix ($T, $M, $N), right : Matrix (T, N, $P)) -> Matrix 
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M - 1
     {
         for j : 0..P - 1
         {
             print_to_builder (*builder, "result.n[%][%] = ", i, j);
+
             for k : 0..N - 1
             {
                 print_to_builder (*builder, "left[%1][%3] * right[%3][%2]", i, j, k);
                 if k != N - 1
                     print_to_builder (*builder, " + ");
             }
+
             println_to_builder (*builder, ";");
         }
     }
@@ -409,9 +444,11 @@ Div :: inline (left : $M/Matrix, right : $T) -> M #must
 #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
+    {
         println_to_builder (*builder, "result.rows[%1] = left.rows[%1] / right;", i);
+    }
 
     return to_string (*builder);
 };
@@ -424,13 +461,14 @@ Equals :: inline (left : $M/Matrix, right : M) -> bool #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
     {
         print_to_builder (*builder, "Equals (left.rows[%1], right.rows[%1])", i);
         if i != M.M - 1
             print_to_builder (*builder, " && ");
     }
+
     println_to_builder (*builder, ";");
 
     return to_string (*builder);
@@ -442,13 +480,14 @@ ApproxZero :: inline (mat : $M/Matrix, epsilon : M.T) -> bool #must
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
     {
         for j : 0..M.N - 1
         {
             if i > 0 || j > 0
                 print_to_builder (*builder, " && ");
+
             print_to_builder (*builder, "ApproxZero (left.r%1c%2, epsilon)", i, j);
         }
     }
@@ -464,13 +503,14 @@ ApproxEquals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool #mus
     return #insert -> string
 {
     builder : String_Builder;
-    builder.allocator = context.allocator;
+
     for i : 0..M.M - 1
     {
         for j : 0..M.N - 1
         {
             if i > 0 || j > 0
                 print_to_builder (*builder, " && ");
+
             print_to_builder (*builder, "ApproxEquals (left.r%1c%2, right.r%1c%2, epsilon)", i, j);
         }
     }
