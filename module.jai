@@ -1,4 +1,4 @@
-// @Note (stefan): We import Math for trig functions and sqrt.
+// @Note(stefan): We import Math for trig functions and sqrt.
 // I've moved a lot of the math functions from my Math module
 // to utils.jai so that users can use any Math module, since
 // any sensible Math module should provide trigonometry.
@@ -48,27 +48,27 @@ MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> 
         return vector;
     }
 
-    assert (IsAxis (right), "Invalid parameter for right (must be [-+][XYZ]).");
-    assert (IsAxis (up), "Invalid parameter for up (must be [-+][XYZ]).");
-    assert (IsAxis (forward), "Invalid parameter for forward (must be [-+][XYZ]).");
-    assert (right[1] != up[1] && up[1] != forward[1] && right[1] != forward[1], "Cannot have the same value for right, up and forward.");
+    assert(IsAxis(right), "Invalid parameter for right (must be [-+][XYZ]).");
+    assert(IsAxis(up), "Invalid parameter for up (must be [-+][XYZ]).");
+    assert(IsAxis(forward), "Invalid parameter for forward (must be [-+][XYZ]).");
+    assert(right[1] != up[1] && up[1] != forward[1] && right[1] != forward[1], "Cannot have the same value for right, up and forward.");
 
-    return .{ToVector (right), ToVector (up), ToVector (forward)};
+    return .{ToVector(right), ToVector(up), ToVector(forward)};
 }
 
 IsVectorType :: inline (info : *Type_Info) -> bool #must
 {
-    return GetVectorTypeInfo (info);
+    return GetVectorTypeInfo(info);
 }
 
 IsQuaternionType :: inline (info : *Type_Info) -> bool #must
 {
-    return GetQuaternionTypeInfo (info);
+    return GetQuaternionTypeInfo(info);
 }
 
 IsMatrixType :: inline (info : *Type_Info) -> bool #must
 {
-    return GetMatrixTypeInfo (info);
+    return GetMatrixTypeInfo(info);
 }
 
 GetQuaternionTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type_Info
@@ -76,8 +76,8 @@ GetQuaternionTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type
     if info.type != .STRUCT
         return false, null;
 
-    struct_info := cast (*Type_Info_Struct) info;
-    if !SharesSameSourcePolymorph (struct_info, type_info (Quatf))
+    struct_info := cast(*Type_Info_Struct) info;
+    if !SharesSameSourcePolymorph(struct_info, type_info(Quatf))
         return false, null;
 
     for struct_info.specified_parameters
@@ -87,7 +87,7 @@ GetQuaternionTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type
 
         ptr := struct_info.constant_storage.data + it.offset_into_constant_storage;
         if it.name == "T"
-            return true, (cast (**Type_Info) ptr).*;
+            return true, (cast(**Type_Info) ptr).*;
     }
 
     return false, null;
@@ -98,9 +98,9 @@ GetVectorTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type_Inf
     if info.type != .STRUCT
         return false, null, 0;
 
-    struct_info := cast (*Type_Info_Struct) info;
+    struct_info := cast(*Type_Info_Struct) info;
 
-    if !SharesSameSourcePolymorph (struct_info, type_info (Vec3f))
+    if !SharesSameSourcePolymorph(struct_info, type_info(Vec3f))
         return false, null, 0, ;
 
     T : *Type_Info;
@@ -114,9 +114,9 @@ GetVectorTypeInfo :: (info : *Type_Info) -> is_vector_type : bool, T : *Type_Inf
         if it.name ==
         {
         case "N";
-            N = (cast (*int) ptr).*;
+            N = (cast(*int) ptr).*;
         case "T";
-            T = (cast (**Type_Info) ptr).*;
+            T = (cast(**Type_Info) ptr).*;
         }
     }
 
@@ -128,8 +128,8 @@ GetMatrixTypeInfo :: (info : *Type_Info) -> is_matrix_type : bool, T : *Type_Inf
     if info.type != .STRUCT
         return false, null, 0, 0;
 
-    struct_info := cast (*Type_Info_Struct) info;
-    if !SharesSameSourcePolymorph (struct_info, type_info (Mat3f))
+    struct_info := cast(*Type_Info_Struct) info;
+    if !SharesSameSourcePolymorph(struct_info, type_info(Mat3f))
         return false, null, 0, 0;
 
     T : *Type_Info;
@@ -144,11 +144,11 @@ GetMatrixTypeInfo :: (info : *Type_Info) -> is_matrix_type : bool, T : *Type_Inf
         if it.name ==
         {
         case "M";
-            M = (cast (*int) ptr).*;
+            M = (cast(*int) ptr).*;
         case "N";
-            N = (cast (*int) ptr).*;
+            N = (cast(*int) ptr).*;
         case "T";
-            T = (cast (**Type_Info) ptr).*;
+            T = (cast(**Type_Info) ptr).*;
         }
     }
 
