@@ -27,79 +27,98 @@ QuatfFromEulerAnglesZYX :: #bake_arguments QuatfFromEulerAnglesOrdered(order=.ZY
 
 QuatFromEulerAnglesOrdered :: (euler : Vec3($T), $$order : EulerAnglesRotationOrder) -> Quat(T) #must
 {
-    cosx := math.cos(euler.x * 0.5);
-    cosy := math.cos(euler.y * 0.5);
-    cosz := math.cos(euler.z * 0.5);
+    a, b, c : Quat(T) = ---;
+    X :: Vec3(T).{1,0,0};
+    Y :: Vec3(T).{0,1,0};
+    Z :: Vec3(T).{0,0,1};
 
-    sinx := math.sin(euler.x * 0.5);
-    siny := math.sin(euler.y * 0.5);
-    sinz := math.sin(euler.z * 0.5);
-
-    sinx_cosy := sinx * cosy;
-    cosx_siny := cosx * siny;
-    cosx_cosy := cosx * cosy;
-    sinx_siny := sinx * siny;
-
-    q : Quat(T) = ---;
-    if order ==
+    if #complete order ==
     {
     case .XYZ;
-        q.x = sinx_cosy * cosz + cosx_siny * sinz;
-        q.y = cosx_siny * cosz - sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz + sinx_siny * cosz;
-        q.w = cosx_cosy * cosz - sinx_siny * sinz;
+        a = QuatFromAxisAngle(X, euler.x);
+        b = QuatFromAxisAngle(Y, euler.y);
+        c = QuatFromAxisAngle(Z, euler.z);
     case .YXZ;
-        q.x = sinx_cosy * cosz + cosx_siny * sinz;
-        q.y = cosx_siny * cosz - sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz - sinx_siny * cosz;
-        q.w = cosx_cosy * cosz + sinx_siny * sinz;
+        a = QuatFromAxisAngle(Y, euler.y);
+        b = QuatFromAxisAngle(X, euler.x);
+        c = QuatFromAxisAngle(Z, euler.z);
     case .ZXY;
-        q.x = sinx_cosy * cosz - cosx_siny * sinz;
-        q.y = cosx_siny * cosz + sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz + sinx_siny * cosz;
-        q.w = cosx_cosy * cosz - sinx_siny * sinz;
+        a = QuatFromAxisAngle(Z, euler.z);
+        b = QuatFromAxisAngle(X, euler.x);
+        c = QuatFromAxisAngle(Y, euler.y);
     case .ZYX;
-        q.x = sinx_cosy * cosz - cosx_siny * sinz;
-        q.y = cosx_siny * cosz + sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz - sinx_siny * cosz;
-        q.w = cosx_cosy * cosz + sinx_siny * sinz;
+        a = QuatFromAxisAngle(Z, euler.z);
+        b = QuatFromAxisAngle(Y, euler.y);
+        c = QuatFromAxisAngle(X, euler.x);
     case .YZX;
-        q.x = sinx_cosy * cosz + cosx_siny * sinz;
-        q.y = cosx_siny * cosz + sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz - sinx_siny * cosz;
-        q.w = cosx_cosy * cosz - sinx_siny * sinz;
+        a = QuatFromAxisAngle(Y, euler.y);
+        b = QuatFromAxisAngle(Z, euler.z);
+        c = QuatFromAxisAngle(X, euler.x);
     case .XZY;
-        q.x = sinx_cosy * cosz - cosx_siny * sinz;
-        q.y = cosx_siny * cosz - sinx_cosy * sinz;
-        q.z = cosx_cosy * sinz + sinx_siny * cosz;
-        q.w = cosx_cosy * cosz + sinx_siny * sinz;
+        a = QuatFromAxisAngle(X, euler.x);
+        b = QuatFromAxisAngle(Z, euler.z);
+        c = QuatFromAxisAngle(Y, euler.y);
     }
 
-    return q;
+    return a * (b * c);
 }
 
-ToEulerAnglesXYZ :: (q : $Q/Quat) -> Vec3(Q.T) #must, flip : bool
+ToEulerAngles :: (q : Quat($T), $$order : EulerAnglesRotationOrder) -> Vec3(T) #must
 {
-    result : Vec3(Q.T) = ---;
-
-    flip : bool = ---;
-    test := q.y * q.w + q.x * q.z;
-    if Abs(test) > 0.4999
+    if #complete order ==
     {
-        sign := ifx test > 0 then 1.0 else -1.0;
-        result.x = sign * 2 * math.atan2(q.z, q.w);
-        result.y = sign * math.PI / 2;
-        result.z = 0;
-        flip = true;
+    case .XYZ; return ToEulerAnglesXYZ(q);
+    // case .XZY; return ToEulerAnglesXZY(q);
+    case .YXZ; return ToEulerAnglesYXZ(q);
+    // case .YZX; return ToEulerAnglesYZX(q);
+    // case .ZXY; return ToEulerAnglesZXY(q);
+    // case .ZYX; return ToEulerAnglesZYX(q);
     }
-    else
-    {
-        sqy := q.y * q.y;
-        result.x = math.atan2(2 * (q.x * q.w - q.y * q.z), 1 - 2 * (q.x * q.x + sqy));
-        result.y = math.asin(2 * test);
-        result.z = math.atan2(2 * (q.z * q.w - q.x * q.y), 1 - 2 * (q.z * q.z + sqy));
-        flip = false;
-    }
+}
 
-    return result, flip;
+ToEulerAnglesXYZ :: (q : Quat($T)) -> Vec3(T) #must
+{
+    return ToEulerAnglesXYZ(Mat3FromQuat(q));
+}
+
+ToEulerAnglesYXZ :: (q : Quat($T)) -> Vec3(T) #must
+{
+    return ToEulerAnglesYXZ(Mat3FromQuat(q));
+}
+
+ToEulerAngles :: (m : Matrix($T, $M, $N), $$order : EulerAnglesRotationOrder) -> Vec3(T) #must
+{
+    if #complete order ==
+    {
+    case .XYZ; return ToEulerAnglesXYZ(m);
+    // case .XZY; return ToEulerAnglesXZY(m);
+    case .YXZ; return ToEulerAnglesYXZ(m);
+    // case .YZX; return ToEulerAnglesYZX(m);
+    // case .ZXY; return ToEulerAnglesZXY(m);
+    // case .ZYX; return ToEulerAnglesZYX(m);
+    }
+}
+
+ToEulerAnglesXYZ :: (m : Matrix($T, $M, $N)) -> Vec3(T) #must
+{
+    T1 := math.atan2(m.r1c2, m.r2c2);
+    C2 := math.sqrt(m.r0c0 * m.r0c0 + m.r0c1 * m.r0c1);
+    T2 := math.atan2(-m.r0c2, C2);
+    S1 := math.sin(T1);
+    C1 := math.cos(T1);
+    T3 := math.atan2(S1 * m.r2c0 - C1 * m.r1c0, C1 * m.r1c1 - S1 * m.r2c1);
+
+    return .{T1, T2, T3};
+}
+
+ToEulerAnglesYXZ :: (m : Matrix($T, $M, $N)) -> Vec3(T) #must
+{
+    T1 := math.atan2(m.r0c2, m.r2c2);
+    C2 := math.sqrt(m.r1c0 * m.r1c0 + m.r1c1 * m.r1c1);
+    T2 := math.atan2(-m.r1c2, C2);
+    S1 := math.sin(T1);
+    C1 := math.cos(T1);
+    T3 := math.atan2(S1 * m.r2c1 - C1 * m.r0c1, C1 * m.r0c0 - S1 * m.r2c0);
+
+    return .{T2, T1, T3};
 }
