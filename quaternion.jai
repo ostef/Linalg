@@ -81,18 +81,6 @@ QuatFromAxisAngle :: inline (axis : Vector($T, 3), angle : T) -> Quat(T) #must
     return .{a.x * s, a.y * s, a.z * s, c};
 }
 
-QuatfFromEulerAngles :: #bake_constants QuatFromEulerAngles(T = f32);
-QuatdFromEulerAngles :: #bake_constants QuatFromEulerAngles(T = f64);
-QuatFromEulerAngles :: inline (euler : EulerAngles($T)) -> Quat(T) #must
-#deprecated
-{
-    yaw   := QuatFromAxisAngle(Vec3(T).{ 0, 1, 0 }, euler.yaw);
-    pitch := QuatFromAxisAngle(Vec3(T).{ 1, 0, 0 }, euler.pitch);
-    roll  := QuatFromAxisAngle(Vec3(T).{ 0, 0, 1 }, euler.roll);
-
-    return roll * yaw * pitch;
-}
-
 QuatfFromMatrix :: #bake_constants QuatFromMatrix(T = f32);
 QuatdFromMatrix :: #bake_constants QuatFromMatrix(T = f64);
 QuatFromMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T) #must

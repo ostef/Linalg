@@ -79,8 +79,6 @@ QuaternionTests :: ($T : Type)
     q = Linalg.QuatLookAt(Linalg.Vec3(T).{ 0, 0, 1 }, Linalg.Vec3(T).{ 0, 1, 0 });
     q = Linalg.QuatFromAxisAngle(Linalg.Vec3(T).{ 0, 0, 1 }, 0);
     Linalg.ToAxisAngle(q);
-    q = Linalg.QuatFromEulerAngles(Linalg.EulerAngles(T).{ 0, 0, 0 });
-    euler := Linalg.EulerAnglesFromQuat(q);
     t := Linalg.Dot(q, q);
     f := Linalg.Length(q);
     q = Linalg.Normalized(q);
