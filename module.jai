@@ -13,7 +13,7 @@ math :: #import "Math";
 #load "vector.jai";
 #load "matrix.jai";
 #load "quaternion.jai";
-#load "euler.jai";
+#load "euler_angles.jai";
 
 CoordinateAxes :: struct
 {
