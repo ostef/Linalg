@@ -805,7 +805,7 @@ Mat4FromRightUpForwardOrigin :: inline (right : $V/Vec3, up : V, forward : V, or
     result.r0c3 = origin.x;
     result.r1c3 = origin.y;
     result.r2c3 = origin.z;
-    result.r3c3 = 0;
+    result.r3c3 = 1;
 
     return result;
 }
