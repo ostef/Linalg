@@ -903,19 +903,27 @@ Mat4LookAt :: inline (position : Vec3($T), target : Vec3(T), up : Vec3(T)) -> Ma
 
 Mat4fOrthographicProjection :: #bake_constants Mat4OrthographicProjection(T = f32);
 Mat4dOrthographicProjection :: #bake_constants Mat4OrthographicProjection(T = f64);
-Mat4OrthographicProjection :: inline (l : $T, r : T, b : T, t : T, n : T, f : T) -> Mat4(T) #must
+Mat4OrthographicProjection :: inline (l : $T, r : T, b : T, t : T, n : T, f : T, depth_range_01 := true) -> Mat4(T) #must
 {
-    return Mat4(T).{
+    result := Mat4(T).{
         2 / (r - l),           0,           0, (r + l) / (l - r),
                   0, 2 / (t - b),           0, (t + b) / (b - t),
                   0,           0, 2 / (f - n), (n + f) / (n - f),
                   0,           0,           0,                 1
     };
+
+    if depth_range_01
+    {
+        result.r2c2 = result.r2c2 * 0.5 + result.r3c2 * 0.5;
+        result.r2c3 = result.r2c3 * 0.5 + result.r3c3 * 0.5;
+    }
+
+    return result;
 }
 
 Mat4fPerspectiveProjection :: #bake_constants Mat4PerspectiveProjection(T = f32);
 Mat4dPerspectiveProjection :: #bake_constants Mat4PerspectiveProjection(T = f64);
-Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f : T, left_handed := true) -> Mat4(T) #must
+Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f : T, left_handed := true, depth_range_01 := true) -> Mat4(T) #must
 {
     view_z := ifx left_handed then cast(T) 1 else cast(T) -1;
     t := math.tan(ToRads(fov_in_degrees) * 0.5) * n;
@@ -923,17 +931,25 @@ Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f :
     r := aspect * t;
     l := -r;
 
-    return Mat4(T).{
+    result := Mat4(T).{
         2 * n / (r - l),               0, -view_z * (r + l) / (r - l),      0,
                       0, 2 * n / (t - b), -view_z * (t + b) / (t - b),      0,
                       0,               0,  view_z * (f + n) / (f - n), -(2 * f * n) / (f - n),
                       0,               0,                      view_z,      0
     };
+
+    if depth_range_01
+    {
+        result.r2c2 = result.r2c2 * 0.5 + result.r3c2 * 0.5;
+        result.r2c3 = result.r2c3 * 0.5 + result.r3c3 * 0.5;
+    }
+
+    return result;
 }
 
 Mat4fInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection(T = f32);
 Mat4dInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection(T = f64);
-Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, left_handed := true) -> Mat4(T) #must
+Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, left_handed := true, depth_range_01 := true) -> Mat4(T) #must
 {
     view_z := ifx left_handed then cast(T) 1 else cast(T) -1;
     t := math.tan(ToRads(fov_in_degrees) * 0.5) * n;
@@ -941,12 +957,20 @@ Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n 
     r := aspect * t;
     l := -r;
 
-    return Mat4(T).{
+    result := Mat4(T).{
         2 * n / (r - l),               0, -view_z * (r + l) / (r - l),      0,
                       0, 2 * n / (t - b), -view_z * (t + b) / (t - b),      0,
                       0,               0,                      view_z, -2 * n,
                       0,               0,                      view_z,      0
     };
+
+    if depth_range_01
+    {
+        result.r2c2 = result.r2c2 * 0.5 + result.r3c2 * 0.5;
+        result.r2c3 = result.r2c3 * 0.5 + result.r3c3 * 0.5;
+    }
+
+    return result;
 }
 
 Mat4fTransformSRT :: #bake_constants Mat4TransformSRT(T = f32);
