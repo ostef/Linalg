@@ -80,18 +80,24 @@ Vec4f :: Vec4(f32);
 Vec2d :: Vec2(f64);
 Vec3d :: Vec3(f64);
 Vec4d :: Vec4(f64);
-Vec2u :: Vec2(u32);
-Vec3u :: Vec3(u32);
-Vec4u :: Vec4(u32);
 Vec2s :: Vec2(s16);
 Vec3s :: Vec3(s16);
 Vec4s :: Vec4(s16);
+Vec2us :: Vec2(u16);
+Vec3us :: Vec3(u16);
+Vec4us :: Vec4(u16);
 Vec2i :: Vec2(s32);
 Vec3i :: Vec3(s32);
 Vec4i :: Vec4(s32);
+Vec2u :: Vec2(u32);
+Vec3u :: Vec3(u32);
+Vec4u :: Vec4(u32);
 Vec2l :: Vec2(s64);
 Vec3l :: Vec3(s64);
 Vec4l :: Vec4(s64);
+Vec2ul :: Vec2(s64);
+Vec3ul :: Vec3(s64);
+Vec4ul :: Vec4(s64);
 
 // @Note(stefan): This works for Vec2 and Vec3, I'm assuming it does for
 // more dimensions, but I'm not sure.
