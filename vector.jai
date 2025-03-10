@@ -128,6 +128,22 @@ Scale :: inline (left : $V/Vector, right : V) -> V #must
     return result;
 }
 
+InvScale :: inline (left : $V/Vector, right : V) -> V #must
+{
+    result : V = ---;
+#insert -> string
+{
+    builder : String_Builder;
+
+    for i : 0..V.N - 1
+        println_to_builder(*builder, "result.n[%1] = left.n[%1] / right.n[%1];", i);
+
+    return to_string(*builder);
+};
+
+    return result;
+}
+
 Dot :: inline (left : $V/Vector, right : V) -> V.T #must
 {
     return #insert -> string
