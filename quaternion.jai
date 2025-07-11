@@ -28,7 +28,7 @@ Quat :: struct (T : Type)
 Quatf :: Quat(f32);
 Quatd :: Quat(f64);
 
-MakeQuat :: inline (vec : Vec3($T), scalar : T) -> Quat(T) #must
+MakeQuat :: inline (vec : Vec3($T), scalar : T) -> Quat(T)
 {
     result : Quat(T) = ---;
     result.vec = vec;
@@ -37,12 +37,12 @@ MakeQuat :: inline (vec : Vec3($T), scalar : T) -> Quat(T) #must
     return result;
 }
 
-MakeQuatf :: inline (vec : Vec3f, scalar : f32) -> Quatf #must
+MakeQuatf :: inline (vec : Vec3f, scalar : f32) -> Quatf
 {
     return MakeQuat(vec, scalar);
 }
 
-MakeQuatd :: inline (vec : Vec3d, scalar : f64) -> Quatd #must
+MakeQuatd :: inline (vec : Vec3d, scalar : f64) -> Quatd
 {
     return MakeQuat(vec, scalar);
 }
@@ -52,7 +52,7 @@ QuatfLookAt :: QuatfFromForwardUp;
 QuatLookAt :: QuatFromForwardUp;
 QuatfFromForwardUp :: #bake_constants QuatFromForwardUp(T = f32);
 //QuatdFromForwardUp :: #bake_constants QuatFromForwardUp(T = f64);
-QuatFromForwardUp :: inline (forward : Vec3($T), up : Vec3(T)) -> Quat(T) #must
+QuatFromForwardUp :: inline (forward : Vec3($T), up : Vec3(T)) -> Quat(T)
 {
     f := Normalized(forward, context.coordinate_axes.forward);
     u := Normalized(up, context.coordinate_axes.up);
@@ -72,7 +72,7 @@ QuatFromForwardUp :: inline (forward : Vec3($T), up : Vec3(T)) -> Quat(T) #must
 
 QuatfFromAxisAngle :: #bake_constants QuatFromAxisAngle(T = f32);
 QuatdFromAxisAngle :: #bake_constants QuatFromAxisAngle(T = f64);
-QuatFromAxisAngle :: inline (axis : Vector($T, 3), angle : T) -> Quat(T) #must
+QuatFromAxisAngle :: inline (axis : Vector($T, 3), angle : T) -> Quat(T)
 {
     a := Normalized(axis);
     c := math.cos(angle / 2.0);
@@ -83,7 +83,7 @@ QuatFromAxisAngle :: inline (axis : Vector($T, 3), angle : T) -> Quat(T) #must
 
 QuatfFromMatrix :: #bake_constants QuatFromMatrix(T = f32);
 QuatdFromMatrix :: #bake_constants QuatFromMatrix(T = f64);
-QuatFromMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T) #must
+QuatFromMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T)
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
@@ -103,7 +103,7 @@ QuatFromMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T) #must
 // This function will fail for matrices that are not ortho normalized and positive
 QuatfFromOrthoNormalizedPositiveMatrix :: #bake_constants QuatFromOrthoNormalizedPositiveMatrix(T = f32);
 QuatdFromOrthoNormalizedPositiveMatrix :: #bake_constants QuatFromOrthoNormalizedPositiveMatrix(T = f64);
-QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T) #must
+QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix($T, $M, $N)) -> Quat(T)
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
@@ -220,7 +220,7 @@ QuatFromOrthoNormalizedPositiveMatrix :: inline (mat : Matrix($T, $M, $N)) -> Qu
 
 QuatfFromVectorToVector :: #bake_constants QuatFromVectorToVector(T = f32);
 QuatdFromVectorToVector :: #bake_constants QuatFromVectorToVector(T = f64);
-QuatFromVectorToVector :: (a : Vec3($T), b : Vec3(T)) -> Quat(T) #must
+QuatFromVectorToVector :: (a : Vec3($T), b : Vec3(T)) -> Quat(T)
 {
     a_norm := Normalized(a);
     b_norm := Normalized(b);
@@ -257,12 +257,12 @@ ToAxisAngle :: inline (q : $Q/Quat, fallback_axis : Q.V3 = .{0,0,1}, epsilon : Q
     return .{q.x / sint, q.y / sint, q.z / sint}, theta;
 }
 
-Dot :: inline (left : $Q/Quat, right : Q) -> Q.T #must
+Dot :: inline (left : $Q/Quat, right : Q) -> Q.T
 {
     return left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;
 }
 
-Length :: inline (q : $Q/Quat) -> Q.T #must
+Length :: inline (q : $Q/Quat) -> Q.T
 {
     s := Dot(q, q);
     if !IsFinite(s)
@@ -271,7 +271,7 @@ Length :: inline (q : $Q/Quat) -> Q.T #must
     return math.sqrt(s);
 }
 
-Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) -> Q #must, len : Q.T
+Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) -> Q, len : Q.T
 {
     if ApproxZero(q, epsilon)
         return fallback, 0;
@@ -283,7 +283,7 @@ Normalized :: inline (q : $Q/Quat, fallback : Q = .{}, epsilon : Q.T = 0.00001) 
 
 // This is here for completeness but for valid rotation
 // quaternions(unit quaternions) the conjugate should be used
-Inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q #must
+Inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q
 {
     sqrd_length := Dot(q, q);
     if ApproxZero(sqrd_length, epsilon)
@@ -292,42 +292,42 @@ Inverse :: inline (q : $Q/Quat, epsilon : Q.T = 0.00001) -> Q #must
     return Q.{-q.x, -q.y, -q.z, q.w} / sqrd_length;
 }
 
-Conjugate :: inline (q : $Q/Quat) -> Q #must
+Conjugate :: inline (q : $Q/Quat) -> Q
 {
     return .{-q.x, -q.y, -q.z, q.w};
 }
 
-Angle :: inline (q : $Q/Quat) -> Q.T #must
+Angle :: inline (q : $Q/Quat) -> Q.T
 {
     return math.acos(q.w) * 2;
 }
 
-Angle :: inline (a : $Q/Quat, b : Q) -> Q.T #must
+Angle :: inline (a : $Q/Quat, b : Q) -> Q.T
 {
     return Angle(b * Conjugate(a));
 }
 
-Rotate :: inline (vec : $V/Vec3, q : Quat(V.T)) -> V #must
+Rotate :: inline (vec : $V/Vec3, q : Quat(V.T)) -> V
 {
     return (q * MakeQuat(vec, 0) * Conjugate(q)).vec;
 }
 
-RightVector :: inline (q : $Q/Quat) -> Vec3(Q.T) #must
+RightVector :: inline (q : $Q/Quat) -> Vec3(Q.T)
 {
     return Rotate(Vec3(Q.T).{ 1, 0, 0 }, q);
 }
 
-UpVector :: inline (q : $Q/Quat) -> Vec3(Q.T) #must
+UpVector :: inline (q : $Q/Quat) -> Vec3(Q.T)
 {
     return Rotate(Vec3(Q.T).{ 0, 1, 0 }, q);
 }
 
-ForwardVector :: inline (q : $Q/Quat) -> Vec3(Q.T) #must
+ForwardVector :: inline (q : $Q/Quat) -> Vec3(Q.T)
 {
     return Rotate(Vec3(Q.T).{ 0, 0, 1 }, q);
 }
 
-NLerp :: inline (a : $Q/Quat, b : Q, t : $T2, $$shortest_path := true) -> Q #must
+NLerp :: inline (a : $Q/Quat, b : Q, t : $T2, $$shortest_path := true) -> Q
 #modify { return IsFloatingPoint(T2), "T2 must be a float type."; }
 {
     first  := a;
@@ -341,7 +341,7 @@ NLerp :: inline (a : $Q/Quat, b : Q, t : $T2, $$shortest_path := true) -> Q #mus
     return Normalized((1 - t) * first + t * second);
 }
 
-Add :: inline (left : $Q/Quat, right : Q) -> Q #must
+Add :: inline (left : $Q/Quat, right : Q) -> Q
 {
     result : Q = ---;
     result.x = left.x + right.x;
@@ -352,7 +352,7 @@ Add :: inline (left : $Q/Quat, right : Q) -> Q #must
     return result;
 }
 
-Sub :: inline (left : $Q/Quat, right : Q) -> Q #must
+Sub :: inline (left : $Q/Quat, right : Q) -> Q
 {
     result : Q = ---;
     result.x = left.x - right.x;
@@ -363,7 +363,7 @@ Sub :: inline (left : $Q/Quat, right : Q) -> Q #must
     return result;
 }
 
-Neg :: inline (q : $Q/Quat) -> Q #must
+Neg :: inline (q : $Q/Quat) -> Q
 {
     result : Q = ---;
     result.x = -q.x;
@@ -374,7 +374,7 @@ Neg :: inline (q : $Q/Quat) -> Q #must
     return result;
 }
 
-Mul :: inline (left : $Q/Quat, right : $T) -> Q #must
+Mul :: inline (left : $Q/Quat, right : $T) -> Q
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     result : Q = ---;
@@ -386,7 +386,7 @@ Mul :: inline (left : $Q/Quat, right : $T) -> Q #must
     return result;
 }
 
-Mul :: inline (left : $Q/Quat, right : Q) -> Q #must
+Mul :: inline (left : $Q/Quat, right : Q) -> Q
 {
     w1 := left.w;
     x1 := left.x;
@@ -407,7 +407,7 @@ Mul :: inline (left : $Q/Quat, right : Q) -> Q #must
     return result;
 }
 
-Div :: inline (left : $Q/Quat, right : $T) -> Q #must
+Div :: inline (left : $Q/Quat, right : $T) -> Q
 {
     result : Q = ---;
     result.x = left.x / right;
@@ -418,65 +418,65 @@ Div :: inline (left : $Q/Quat, right : $T) -> Q #must
     return result;
 }
 
-Equals :: inline (left : $Q/Quat, right : Q) -> bool #must
+Equals :: inline (left : $Q/Quat, right : Q) -> bool
 {
     return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
 }
 
-ApproxZero :: inline (val : $Q/Quat, epsilon : Q.T) -> bool #must
+ApproxZero :: inline (val : $Q/Quat, epsilon : Q.T) -> bool
 {
     return ApproxZero(val.x, epsilon) && ApproxZero(val.y, epsilon) && ApproxZero(val.z, epsilon) && ApproxZero(val.w, epsilon);
 }
 
-ApproxEquals :: inline (left : $Q/Quat, right : Q, epsilon : Q.T) -> bool #must
+ApproxEquals :: inline (left : $Q/Quat, right : Q, epsilon : Q.T) -> bool
 {
     return ApproxEquals(left.x, right.x, epsilon) && ApproxEquals(left.y, right.y, epsilon) && ApproxEquals(left.z, right.z, epsilon) && ApproxEquals(left.w, right.w, epsilon);
 }
 
-IsFinite :: inline (val : $Q/Quat) -> bool #must
+IsFinite :: inline (val : $Q/Quat) -> bool
 {
     return IsFinite(val.x) && IsFinite(val.y) && IsFinite(val.z) && IsFinite(val.w);
 }
 
-operator *[] :: inline (q : $Q/Quat, index : s64) -> *Q.T #must
+operator *[] :: inline (q : $Q/Quat, index : s64) -> *Q.T
 {
     return *q.n[index];
 }
 
-operator + :: inline (left : $Q/Quat, right : Q) -> Q #must
+operator + :: inline (left : $Q/Quat, right : Q) -> Q
 {
     return Add(left, right);
 }
 
-operator - :: inline (left : $Q/Quat, right : Q) -> Q #must
+operator - :: inline (left : $Q/Quat, right : Q) -> Q
 {
     return Sub(left, right);
 }
 
-operator - :: inline (q : $Q/Quat) -> Q #must
+operator - :: inline (q : $Q/Quat) -> Q
 {
     return Neg(q);
 }
 
-operator * :: inline (left : $Q/Quat, right : $T) -> Q #must
+operator * :: inline (left : $Q/Quat, right : $T) -> Q
 #modify { return IsNumeric(T), "T must be numeric."; }
 #symmetric
 {
     return Mul(left, right);
 }
 
-operator * :: inline (left : $Q/Quat, right : Q) -> Q #must
+operator * :: inline (left : $Q/Quat, right : Q) -> Q
 {
     return Mul(left, right);
 }
 
-operator / :: inline (left : $Q/Quat, right : $T) -> Q #must
+operator / :: inline (left : $Q/Quat, right : $T) -> Q
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     return Div(left, right);
 }
 
-operator == :: inline (left : $Q/Quat, right : Q) -> bool #must
+operator == :: inline (left : $Q/Quat, right : Q) -> bool
 {
     return Equals(left, right);
 }

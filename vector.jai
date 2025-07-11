@@ -101,7 +101,7 @@ Vec4ul :: Vec4(s64);
 
 // @Note(stefan): This works for Vec2 and Vec3, I'm assuming it does for
 // more dimensions, but I'm not sure.
-Angle :: inline (a : $V/Vector, b : V) -> V.F #must
+Angle :: inline (a : $V/Vector, b : V) -> V.F
 {
     denominator := math.sqrt(Dot(a, a) * Dot(b, b));
     if ApproxZero(denominator, 0.00001)
@@ -112,7 +112,7 @@ Angle :: inline (a : $V/Vector, b : V) -> V.F #must
     return math.acos(d);
 }
 
-Scale :: inline (left : $V/Vector, right : V) -> V #must
+Scale :: inline (left : $V/Vector, right : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -128,7 +128,7 @@ Scale :: inline (left : $V/Vector, right : V) -> V #must
     return result;
 }
 
-InvScale :: inline (left : $V/Vector, right : V) -> V #must
+InvScale :: inline (left : $V/Vector, right : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -144,7 +144,7 @@ InvScale :: inline (left : $V/Vector, right : V) -> V #must
     return result;
 }
 
-Dot :: inline (left : $V/Vector, right : V) -> V.T #must
+Dot :: inline (left : $V/Vector, right : V) -> V.T
 {
     return #insert -> string
 {
@@ -163,12 +163,12 @@ Dot :: inline (left : $V/Vector, right : V) -> V.T #must
 };
 }
 
-SqrdLength :: inline (vec : $V/Vector) -> V.F #must
+SqrdLength :: inline (vec : $V/Vector) -> V.F
 {
     return Dot(vec, vec);
 }
 
-Length :: inline (vec : $V/Vector) -> V.F #must
+Length :: inline (vec : $V/Vector) -> V.F
 {
     s := cast(V.F) Dot(vec, vec);
     if !IsFinite(s)
@@ -177,7 +177,7 @@ Length :: inline (vec : $V/Vector) -> V.F #must
     return math.sqrt(s);
 }
 
-Normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.00001) -> V #must, len : V.F
+Normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.00001) -> V, len : V.F
 {
     if ApproxZero(vec, epsilon)
         return fallback, 0;
@@ -187,7 +187,7 @@ Normalized :: inline (vec : $V/Vector, fallback : V = .{}, epsilon : V.F = 0.000
     return vec * (1.0 / len), len;
 }
 
-Clamp :: inline (vec : $V/Vector, min : V, max : V) -> V #must
+Clamp :: inline (vec : $V/Vector, min : V, max : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -203,7 +203,7 @@ Clamp :: inline (vec : $V/Vector, min : V, max : V) -> V #must
     return result;
 }
 
-Round :: inline (vec : $V/Vector) -> V #must
+Round :: inline (vec : $V/Vector) -> V
 {
     result : V = ---;
 #insert -> string
@@ -219,7 +219,7 @@ Round :: inline (vec : $V/Vector) -> V #must
     return result;
 }
 
-Floor :: inline (vec : $V/Vector) -> V #must
+Floor :: inline (vec : $V/Vector) -> V
 {
     result : V = ---;
 #insert -> string
@@ -235,7 +235,7 @@ Floor :: inline (vec : $V/Vector) -> V #must
     return result;
 }
 
-Ceil :: inline (vec : $V/Vector) -> V #must
+Ceil :: inline (vec : $V/Vector) -> V
 {
     result : V = ---;
 #insert -> string
@@ -251,7 +251,7 @@ Ceil :: inline (vec : $V/Vector) -> V #must
     return result;
 }
 
-Min :: inline (a : $V/Vector, b : V) -> V #must
+Min :: inline (a : $V/Vector, b : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -267,7 +267,7 @@ Min :: inline (a : $V/Vector, b : V) -> V #must
     return result;
 }
 
-Max :: inline (a : $V/Vector, b : V) -> V #must
+Max :: inline (a : $V/Vector, b : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -283,7 +283,7 @@ Max :: inline (a : $V/Vector, b : V) -> V #must
     return result;
 }
 
-Abs :: inline (vec : $V/Vector) -> V #must
+Abs :: inline (vec : $V/Vector) -> V
 {
     result : V = ---;
 #insert -> string
@@ -299,7 +299,7 @@ Abs :: inline (vec : $V/Vector) -> V #must
     return result;
 }
 
-Lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
+Lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V
 #modify { return IsFloatingPoint(T2), "T2 must be a float type."; }
 {
     result : V = ---;
@@ -316,32 +316,32 @@ Lerp :: inline (a : $V/Vector, b : V, t : $T2) -> V #must
     return result;
 }
 
-SqrdDistance :: inline (a : $V/Vector, b : V) -> V.F #must
+SqrdDistance :: inline (a : $V/Vector, b : V) -> V.F
 {
     return SqrdLength(b - a);
 }
 
-Distance :: inline (a : $V/Vector, b : V) -> V.F #must
+Distance :: inline (a : $V/Vector, b : V) -> V.F
 {
     return Length(b - a);
 }
 
-Reflect :: inline (incident : $V/Vector, normal : V) -> V #must
+Reflect :: inline (incident : $V/Vector, normal : V) -> V
 {
     return incident - 2 * Dot(normal, incident) * normal;
 }
 
-Project :: inline (left : $V/Vector, right : V) -> V #must
+Project :: inline (left : $V/Vector, right : V) -> V
 {
     return right * (Dot(left, right) / Dot(right, right));
 }
 
-Reject :: inline (left : $V/Vector, right : V) -> V #must
+Reject :: inline (left : $V/Vector, right : V) -> V
 {
     return left - right * (Dot(left, right) / Dot(right, right));
 }
 
-Add :: inline (left : $V/Vector, right : V) -> V #must
+Add :: inline (left : $V/Vector, right : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -357,7 +357,7 @@ Add :: inline (left : $V/Vector, right : V) -> V #must
     return result;
 }
 
-Sub :: inline (left : $V/Vector, right : V) -> V #must
+Sub :: inline (left : $V/Vector, right : V) -> V
 {
     result : V = ---;
 #insert -> string
@@ -373,7 +373,7 @@ Sub :: inline (left : $V/Vector, right : V) -> V #must
     return result;
 }
 
-Neg :: inline (vec : $V/Vector) -> V #must
+Neg :: inline (vec : $V/Vector) -> V
 {
     #assert #run IsSigned(V.T) "Cannot negate an unsigned vector.";
 
@@ -391,7 +391,7 @@ Neg :: inline (vec : $V/Vector) -> V #must
     return result;
 }
 
-Mul :: inline (left : $V/Vector, right : $T) -> V #must
+Mul :: inline (left : $V/Vector, right : $T) -> V
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     result : V = ---;
@@ -408,7 +408,7 @@ Mul :: inline (left : $V/Vector, right : $T) -> V #must
     return result;
 }
 
-Div :: inline (left : $V/Vector, right : $T) -> V #must
+Div :: inline (left : $V/Vector, right : $T) -> V
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     result : V = ---;
@@ -425,7 +425,7 @@ Div :: inline (left : $V/Vector, right : $T) -> V #must
     return result;
 }
 
-Equals :: inline (left : $V/Vector, right : V) -> bool #must
+Equals :: inline (left : $V/Vector, right : V) -> bool
 {
     return #insert -> string
 {
@@ -444,7 +444,7 @@ Equals :: inline (left : $V/Vector, right : V) -> bool #must
 };
 }
 
-ApproxZero :: inline (vec : $V/Vector, epsilon : V.F) -> bool #must
+ApproxZero :: inline (vec : $V/Vector, epsilon : V.F) -> bool
 {
     return #insert -> string
 {
@@ -463,7 +463,7 @@ ApproxZero :: inline (vec : $V/Vector, epsilon : V.F) -> bool #must
 };
 }
 
-ApproxEquals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #must
+ApproxEquals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool
 {
     return #insert -> string
 {
@@ -482,7 +482,7 @@ ApproxEquals :: inline (left : $V/Vector, right : V, epsilon : V.F) -> bool #mus
 };
 }
 
-IsFinite :: inline (vec : $V/Vector) -> bool #must
+IsFinite :: inline (vec : $V/Vector) -> bool
 {
     return #insert -> string
 {
@@ -501,49 +501,49 @@ IsFinite :: inline (vec : $V/Vector) -> bool #must
 };
 }
 
-operator *[] :: inline (vec : $V/Vector, index : s64) -> *V.T #must
+operator *[] :: inline (vec : $V/Vector, index : s64) -> *V.T
 {
     return *vec.n[index];
 }
 
-operator + :: inline (left : $V/Vector, right : V) -> V #must
+operator + :: inline (left : $V/Vector, right : V) -> V
 {
     return Add(left, right);
 }
 
-operator - :: inline (left : $V/Vector, right : V) -> V #must
+operator - :: inline (left : $V/Vector, right : V) -> V
 {
     return Sub(left, right);
 }
 
-operator - :: inline (vec : $V/Vector) -> V #must
+operator - :: inline (vec : $V/Vector) -> V
 {
     #assert #run IsSigned(V.T) "Cannot negate an unsigned vector.";
 
     return Neg(vec);
 }
 
-operator * :: inline (left : $V/Vector, right : $T) -> V #must
+operator * :: inline (left : $V/Vector, right : $T) -> V
 #modify { return IsNumeric(T), "T must be numeric."; }
 #symmetric
 {
     return Mul(left, right);
 }
 
-operator / :: inline (left : $V/Vector, right : $T) -> V #must
+operator / :: inline (left : $V/Vector, right : $T) -> V
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     return Div(left, right);
 }
 
-operator == :: inline (left : $V/Vector, right : V) -> bool #must
+operator == :: inline (left : $V/Vector, right : V) -> bool
 {
     return Equals(left, right);
 }
 
 /* Vec2 */
 
-Rotate :: inline (v : $V/Vec2, theta : V.F) -> V #must
+Rotate :: inline (v : $V/Vec2, theta : V.F) -> V
 {
     c := math.cos(theta);
     s := math.sin(theta);
@@ -551,26 +551,26 @@ Rotate :: inline (v : $V/Vec2, theta : V.F) -> V #must
     return .{cast(V.T) (v.x * c - v.y * s), cast(V.T) (v.x * s + v.y * c)};
 }
 
-SignedAngle :: inline (a : $V/Vec2, b : V) -> V.F #must
+SignedAngle :: inline (a : $V/Vec2, b : V) -> V.F
 {
     s := Sign(a.x * b.y - a.y * b.y);
 
     return Angle(a, b) * s;
 }
 
-PerpendicularCW :: inline (vec : $V/Vec2) -> V #must
+PerpendicularCW :: inline (vec : $V/Vec2) -> V
 {
     return .{vec.y, -vec.x};
 }
 
-PerpendicularCCW :: inline (vec : $V/Vec2) -> V #must
+PerpendicularCCW :: inline (vec : $V/Vec2) -> V
 {
     return .{-vec.y, vec.x};
 }
 
 /* Vec3 */
 
-MakeVec3 :: inline (xy : Vec2($T), z : T = 0) -> Vec3(T) #must
+MakeVec3 :: inline (xy : Vec2($T), z : T = 0) -> Vec3(T)
 {
     result : Vec3(T) = ---;
     result.xy = xy;
@@ -579,37 +579,37 @@ MakeVec3 :: inline (xy : Vec2($T), z : T = 0) -> Vec3(T) #must
     return result;
 }
 
-MakeVec3f :: inline (xy : Vec2f, z : f32 = 0) -> Vec3f #must
+MakeVec3f :: inline (xy : Vec2f, z : f32 = 0) -> Vec3f
 {
     return MakeVec3(xy, z);
 }
 
-MakeVec3d :: inline (xy : Vec2d, z : f64 = 0) -> Vec3d #must
+MakeVec3d :: inline (xy : Vec2d, z : f64 = 0) -> Vec3d
 {
     return MakeVec3(xy, z);
 }
 
-MakeVec3u :: inline (xy : Vec2u, z : u32 = 0) -> Vec3u #must
+MakeVec3u :: inline (xy : Vec2u, z : u32 = 0) -> Vec3u
 {
     return MakeVec3(xy, z);
 }
 
-MakeVec3s :: inline (xy : Vec2s, z : s16 = 0) -> Vec3s #must
+MakeVec3s :: inline (xy : Vec2s, z : s16 = 0) -> Vec3s
 {
     return MakeVec3(xy, z);
 }
 
-MakeVec3i :: inline (xy : Vec2i, z : s32 = 0) -> Vec3i #must
+MakeVec3i :: inline (xy : Vec2i, z : s32 = 0) -> Vec3i
 {
     return MakeVec3(xy, z);
 }
 
-MakeVec3l :: inline (xy : Vec2l, z : s64 = 0) -> Vec3l #must
+MakeVec3l :: inline (xy : Vec2l, z : s64 = 0) -> Vec3l
 {
     return MakeVec3(xy, z);
 }
 
-Cross :: inline (left : Vector($T, 3), right : Vector(T, 3)) -> Vector(T, 3) #must
+Cross :: inline (left : Vector($T, 3), right : Vector(T, 3)) -> Vector(T, 3)
 {
     result : Vector(T, 3) = ---;
     result.x = left.y * right.z - left.z * right.y;
@@ -619,7 +619,7 @@ Cross :: inline (left : Vector($T, 3), right : Vector(T, 3)) -> Vector(T, 3) #mu
     return result;
 }
 
-SignedAngle :: inline (a : $V/Vec3, b : V, axis : V) -> V.F #must
+SignedAngle :: inline (a : $V/Vec3, b : V, axis : V) -> V.F
 {
     c := Cross(a, b);
     s := Sign(Dot(axis, c));
@@ -681,7 +681,7 @@ ForwardToOrthonormalBasis :: inline (forward : $V/Vec3, base_axes := context.coo
     return Normalized(right), Normalized(up);
 }
 
-ToDegs :: inline (v : $V/Vec3) -> V #must
+ToDegs :: inline (v : $V/Vec3) -> V
 {
     return .{
         ToDegs(v.x),
@@ -690,7 +690,7 @@ ToDegs :: inline (v : $V/Vec3) -> V #must
     };
 }
 
-ToRads :: inline (v : $V/Vec3) -> V #must
+ToRads :: inline (v : $V/Vec3) -> V
 {
     return .{
         ToRads(v.x),
@@ -701,7 +701,7 @@ ToRads :: inline (v : $V/Vec3) -> V #must
 
 /* Vec4 */
 
-MakeVec4 :: inline (xyz : Vector($T, 3), w : T = 0) -> Vec4(T) #must
+MakeVec4 :: inline (xyz : Vector($T, 3), w : T = 0) -> Vec4(T)
 {
     result : Vec4(T) = ---;
     result.xyz = xyz;
@@ -710,32 +710,32 @@ MakeVec4 :: inline (xyz : Vector($T, 3), w : T = 0) -> Vec4(T) #must
     return result;
 }
 
-MakeVec4f :: inline (xyz : Vec3f, w : f32 = 0) -> Vec4f #must
+MakeVec4f :: inline (xyz : Vec3f, w : f32 = 0) -> Vec4f
 {
     return MakeVec4(xyz, w);
 }
 
-MakeVec4d :: inline (xyz : Vec3d, w : f64 = 0) -> Vec4d #must
+MakeVec4d :: inline (xyz : Vec3d, w : f64 = 0) -> Vec4d
 {
     return MakeVec4(xyz, w);
 }
 
-MakeVec4u :: inline (xyz : Vec3u, w : u32 = 0) -> Vec4u #must
+MakeVec4u :: inline (xyz : Vec3u, w : u32 = 0) -> Vec4u
 {
     return MakeVec4(xyz, w);
 }
 
-MakeVec4s :: inline (xyz : Vec3s, w : s16 = 0) -> Vec4s #must
+MakeVec4s :: inline (xyz : Vec3s, w : s16 = 0) -> Vec4s
 {
     return MakeVec4(xyz, w);
 }
 
-MakeVec4i :: inline (xyz : Vec3i, w : s32 = 0) -> Vec4i #must
+MakeVec4i :: inline (xyz : Vec3i, w : s32 = 0) -> Vec4i
 {
     return MakeVec4(xyz, w);
 }
 
-MakeVec4l :: inline (xyz : Vec3l, w : s64 = 0) -> Vec4l #must
+MakeVec4l :: inline (xyz : Vec3l, w : s64 = 0) -> Vec4l
 {
     return MakeVec4(xyz, w);
 }

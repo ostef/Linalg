@@ -94,7 +94,7 @@ Mat3d   :: Mat3(f64);
 Mat4d   :: Mat4(f64);
 Mat3x4d :: Mat3x4(f64);
 
-MatrixFromQuat :: inline ($M : s64, $N : s64, q : Quat($T)) -> Matrix(T, M, N) #must
+MatrixFromQuat :: inline ($M : s64, $N : s64, q : Quat($T)) -> Matrix(T, M, N)
 {
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
 
@@ -124,7 +124,7 @@ MatrixFromQuat :: inline ($M : s64, $N : s64, q : Quat($T)) -> Matrix(T, M, N) #
     return result;
 }
 
-MatrixFromAxisAngle :: inline ($M : s64, $N : s64, axis : Vec3($T), angle : Vec3(T).F) -> Matrix(T, M, N) #must
+MatrixFromAxisAngle :: inline ($M : s64, $N : s64, axis : Vec3($T), angle : Vec3(T).F) -> Matrix(T, M, N)
 {
     #assert #run IsFloatingPoint(T) "T needs to be a floating point type.";
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
@@ -150,7 +150,7 @@ MatrixFromAxisAngle :: inline ($M : s64, $N : s64, axis : Vec3($T), angle : Vec3
     return result;
 }
 
-TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vec3(T)) -> Vec3(T) #must
+TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vector(T, 3)) -> Vector(T, 3)
 {
     #assert #run IsFloatingPoint(T) "T needs to be a floating point type.";
     #assert M >= 4 && N >= 4 "Invalid dimensions for matrix (need at least 4 rows and 4 columns).";
@@ -163,7 +163,7 @@ TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vec3(T)) -> Vec3(T) 
     return result;
 }
 
-TransformVector :: inline (mat : Matrix($T, $M, $N), vec : Vec3(T)) -> Vec3(T) #must
+TransformVector :: inline (mat : Matrix($T, $M, $N), vec : Vector(T, 3)) -> Vector(T, 3)
 {
     #assert #run IsFloatingPoint(T) "T needs to be a floating point type.";
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
@@ -176,7 +176,7 @@ TransformVector :: inline (mat : Matrix($T, $M, $N), vec : Vec3(T)) -> Vec3(T) #
     return result;
 }
 
-GetRow :: inline (mat : $M/Matrix, index : s64) -> M.Row #must
+GetRow :: inline (mat : $M/Matrix, index : s64) -> M.Row
 {
     return mat.rows[index];
 }
@@ -186,7 +186,7 @@ SetRow :: inline (mat : *$M/Matrix, index : s64, row : M.Row)
     mat.rows[index] = row;
 }
 
-GetCol :: inline (mat : $M/Matrix, index : s64) -> M.Col #must
+GetCol :: inline (mat : $M/Matrix, index : s64) -> M.Col
 {
     result : M.Col = ---;
 #insert -> string
@@ -219,7 +219,7 @@ SetCol :: inline (mat : *$M/Matrix, index : s64, col : M.Col)
 };
 }
 
-Transposed :: inline (mat : $M/Matrix) -> M.Transposed #must
+Transposed :: inline (mat : $M/Matrix) -> M.Transposed
 {
     result : M.Transposed = ---;
 #insert -> string
@@ -240,7 +240,7 @@ Transposed :: inline (mat : $M/Matrix) -> M.Transposed #must
     return result;
 }
 
-Resize :: inline (mat : $M/Matrix, $T2 : Type, $M2 : s64, $N2 : s64) -> Matrix(T2, M2, N2) #must
+Resize :: inline (mat : $M/Matrix, $T2 : Type, $M2 : s64, $N2 : s64) -> Matrix(T2, M2, N2)
 {
     #assert #run IsNumeric(T2) "T2 needs to be a numeric type.";
     #assert M2 > 0 && N2 > 0 "Invalid matrix dimensions.";
@@ -266,7 +266,7 @@ Resize :: inline (mat : $M/Matrix, $T2 : Type, $M2 : s64, $N2 : s64) -> Matrix(T
     return result;
 }
 
-Add :: inline (left : $M/Matrix, right : M) -> M #must
+Add :: inline (left : $M/Matrix, right : M) -> M
 {
     result : M = ---;
 #insert -> string
@@ -288,7 +288,7 @@ Add :: inline (left : $M/Matrix, right : M) -> M #must
     return result;
 }
 
-Sub :: inline (left : $M/Matrix, right : M) -> M #must
+Sub :: inline (left : $M/Matrix, right : M) -> M
 {
     result : M = ---;
 #insert -> string
@@ -310,7 +310,7 @@ Sub :: inline (left : $M/Matrix, right : M) -> M #must
     return result;
 }
 
-Neg :: inline (mat : $M/Matrix) -> M #must
+Neg :: inline (mat : $M/Matrix) -> M
 {
     #assert #run IsSigned(M.T) "Cannot negate an unsigned matrix.";
 
@@ -334,7 +334,7 @@ Neg :: inline (mat : $M/Matrix) -> M #must
     return result;
 }
 
-Mul :: inline (left : $M/Matrix, right : $T) -> M #must
+Mul :: inline (left : $M/Matrix, right : $T) -> M
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     result : M = ---;
@@ -353,7 +353,7 @@ Mul :: inline (left : $M/Matrix, right : $T) -> M #must
     return result;
 }
 
-Mul :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector #must
+Mul :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector
 {
     result : M.LeftVector = ---;
 #insert -> string
@@ -380,7 +380,7 @@ Mul :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector #must
     return result;
 }
 
-Mul :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector #must
+Mul :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector
 {
     result : M.RightVector = ---;
 #insert -> string
@@ -407,7 +407,7 @@ Mul :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector #must
     return result;
 }
 
-Mul :: inline (left : Matrix($T, $M, $N), right : Matrix(T, N, $P)) -> Matrix(T, M, P) #must
+Mul :: inline (left : Matrix($T, $M, $N), right : Matrix(T, N, $P)) -> Matrix(T, M, P)
 {
     result : Matrix(T, M, P) = ---;
 #insert -> string
@@ -437,7 +437,7 @@ Mul :: inline (left : Matrix($T, $M, $N), right : Matrix(T, N, $P)) -> Matrix(T,
     return result;
 }
 
-Div :: inline (left : $M/Matrix, right : $T) -> M #must
+Div :: inline (left : $M/Matrix, right : $T) -> M
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     result : M = ---;
@@ -456,7 +456,7 @@ Div :: inline (left : $M/Matrix, right : $T) -> M #must
     return result;
 }
 
-Equals :: inline (left : $M/Matrix, right : M) -> bool #must
+Equals :: inline (left : $M/Matrix, right : M) -> bool
 {
     return #insert -> string
 {
@@ -475,7 +475,7 @@ Equals :: inline (left : $M/Matrix, right : M) -> bool #must
 };
 }
 
-ApproxZero :: inline (mat : $M/Matrix, epsilon : M.T) -> bool #must
+ApproxZero :: inline (mat : $M/Matrix, epsilon : M.T) -> bool
 {
     return #insert -> string
 {
@@ -498,7 +498,7 @@ ApproxZero :: inline (mat : $M/Matrix, epsilon : M.T) -> bool #must
 };
 }
 
-ApproxEquals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool #must
+ApproxEquals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool
 {
     return #insert -> string
 {
@@ -521,57 +521,57 @@ ApproxEquals :: inline (left : $M/Matrix, right : M, epsilon : M.T) -> bool #mus
 };
 }
 
-operator *[] :: inline (mat : $M/Matrix, row : s64) -> *M.Row #must
+operator *[] :: inline (mat : $M/Matrix, row : s64) -> *M.Row
 {
     return *mat.rows[row];
 }
 
-operator + :: inline (left : $M/Matrix, right : M) -> M #must
+operator + :: inline (left : $M/Matrix, right : M) -> M
 {
     return Add(left, right);
 }
 
-operator - :: inline (left : $M/Matrix, right : M) -> M #must
+operator - :: inline (left : $M/Matrix, right : M) -> M
 {
     return Sub(left, right);
 }
 
-operator - :: inline (mat : $M/Matrix) -> M #must
+operator - :: inline (mat : $M/Matrix) -> M
 {
     #assert #run IsSigned(M.T) "Cannot negate an unsigned matrix.";
 
     return Neg(mat);
 }
 
-operator * :: inline (left : $M/Matrix, right : $T) -> M #must
+operator * :: inline (left : $M/Matrix, right : $T) -> M
 #modify { return IsNumeric(T), "T must be numeric."; }
 #symmetric
 {
     return Mul(left, right);
 }
 
-operator * :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector #must
+operator * :: inline (left : $M/Matrix, right : M.RightVector) -> M.LeftVector
 {
     return Mul(left, right);
 }
 
-operator * :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector #must
+operator * :: inline (left : M.LeftVector, right : $M/Matrix) -> M.RightVector
 {
     return Mul(left, right);
 }
 
-operator * :: inline (left : Matrix($T, $M, $N), right : Matrix(T, N, $P)) -> Matrix(T, M, P) #must
+operator * :: inline (left : Matrix($T, $M, $N), right : Matrix(T, N, $P)) -> Matrix(T, M, P)
 {
     return Mul(left, right);
 }
 
-operator / :: inline (left : $M/Matrix, right : $T) -> M #must
+operator / :: inline (left : $M/Matrix, right : $T) -> M
 #modify { return IsNumeric(T), "T must be numeric."; }
 {
     return Div(left, right);
 }
 
-operator == :: inline (left : $M/Matrix, right : M) -> bool #must
+operator == :: inline (left : $M/Matrix, right : M) -> bool
 {
     return Equals(left, right);
 }
@@ -586,7 +586,7 @@ MakeMat3 :: inline (
     r0 : Vector($T, 3),
     r1 : Vector(T, 3),
     r2 : Vector(T, 3)
-) -> Mat3(T) #must
+) -> Mat3(T)
 {
     result : Mat3(T) = ---;
     result.r0 = r0;
@@ -600,7 +600,7 @@ MakeMat3f :: inline (
     r0 : Vec3f,
     r1 : Vec3f,
     r2 : Vec3f
-) -> Mat3f #must
+) -> Mat3f
 {
     return MakeMat3(r0, r1, r2);
 }
@@ -609,12 +609,12 @@ MakeMat3d :: inline (
     r0 : Vec3d,
     r1 : Vec3d,
     r2 : Vec3d
-) -> Mat3d #must
+) -> Mat3d
 {
     return MakeMat3(r0, r1, r2);
 }
 
-Mat3FromRightUpForward :: inline (right : $V/Vec3, up : V, forward : V) -> Mat3(V.T) #must
+Mat3FromRightUpForward :: inline (right : $V/Vec3, up : V, forward : V) -> Mat3(V.T)
 {
     result : Mat3(V.T) = ---;
     result.r0c0 = right.x;
@@ -632,12 +632,12 @@ Mat3FromRightUpForward :: inline (right : $V/Vec3, up : V, forward : V) -> Mat3(
     return result;
 }
 
-Mat3fFromRightUpForward :: inline (right : Vec3f, up : Vec3f, forward : Vec3f) -> Mat3f #must
+Mat3fFromRightUpForward :: inline (right : Vec3f, up : Vec3f, forward : Vec3f) -> Mat3f
 {
     return Mat3FromRightUpForward(right, up, forward);
 }
 
-Mat3dFromRightUpForward :: inline (right : Vec3d, up : Vec3d, forward : Vec3d) -> Mat3d #must
+Mat3dFromRightUpForward :: inline (right : Vec3d, up : Vec3d, forward : Vec3d) -> Mat3d
 {
     return Mat3FromRightUpForward(right, up, forward);
 }
@@ -656,7 +656,7 @@ Mat3Rotate :: Mat3FromAxisAngle;
 
 Mat3fScale :: #bake_constants Mat3Scale(T = f32);
 Mat3dScale :: #bake_constants Mat3Scale(T = f64);
-Mat3Scale :: inline (vec : Vec3($T)) -> Mat3(T) #must
+Mat3Scale :: inline (vec : Vec3($T)) -> Mat3(T)
 {
     result : Mat3(T);
     result.r0c0 = vec.x;
@@ -666,7 +666,7 @@ Mat3Scale :: inline (vec : Vec3($T)) -> Mat3(T) #must
     return result;
 }
 
-RightVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
+RightVector :: inline (mat : $M/Matrix) -> Vec3(M.T)
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol(mat, 0);
@@ -674,7 +674,7 @@ RightVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
     return Normalized(result.xyz);
 }
 
-UpVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
+UpVector :: inline (mat : $M/Matrix) -> Vec3(M.T)
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol(mat, 1);
@@ -682,7 +682,7 @@ UpVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
     return Normalized(result.xyz);
 }
 
-ForwardVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
+ForwardVector :: inline (mat : $M/Matrix) -> Vec3(M.T)
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result := GetCol(mat, 2);
@@ -690,7 +690,7 @@ ForwardVector :: inline (mat : $M/Matrix) -> Vec3(M.T) #must
     return Normalized(result.xyz);
 }
 
-RotationMatrix :: inline (mat : $M/Matrix) -> M #must
+RotationMatrix :: inline (mat : $M/Matrix) -> M
 {
     #assert M.M >= 3 && M.N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
     result : M;
@@ -708,7 +708,7 @@ RotationMatrix :: inline (mat : $M/Matrix) -> M #must
     return result;
 }
 
-Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M #must, det : float
+Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M, det : float
 {
     a := GetCol(mat, 0);
     b := GetCol(mat, 1);
@@ -729,7 +729,7 @@ Inverse :: inline (mat : $M/Mat3, epsilon : M.T = 0.00001) -> M #must, det : flo
         det;
 }
 
-Determinant :: inline (mat : $M/Mat3) -> float #must
+Determinant :: inline (mat : $M/Mat3) -> float
 {
     a := GetCol(mat, 0);
     b := GetCol(mat, 1);
@@ -753,7 +753,7 @@ MakeMat4 :: inline (
     r1 : V,
     r2 : V,
     r3 : V
-) -> Mat4(V.T) #must
+) -> Mat4(V.T)
 {
     result : Mat4(V.T) = ---;
     result.r0 = r0;
@@ -769,7 +769,7 @@ MakeMat4f :: inline (
     r1 : Vec4f,
     r2 : Vec4f,
     r3 : Vec4f
-) -> Mat4f #must
+) -> Mat4f
 {
     return MakeMat4(r0, r1, r2, r3);
 }
@@ -779,12 +779,12 @@ MakeMat4d :: inline (
     r1 : Vec4d,
     r2 : Vec4d,
     r3 : Vec4d
-) -> Mat4d #must
+) -> Mat4d
 {
     return MakeMat4(r0, r1, r2, r3);
 }
 
-Mat4FromRightUpForwardOrigin :: inline (right : $V/Vec3, up : V, forward : V, origin := V.{}) -> Mat4(V.T) #must
+Mat4FromRightUpForwardOrigin :: inline (right : $V/Vec3, up : V, forward : V, origin := V.{}) -> Mat4(V.T)
 {
     result : Mat4(V.T) = ---;
     result.r0c0 = right.x;
@@ -810,12 +810,12 @@ Mat4FromRightUpForwardOrigin :: inline (right : $V/Vec3, up : V, forward : V, or
     return result;
 }
 
-Mat4fFromRightUpForwardOrigin :: inline (right : Vec3f, up : Vec3f, forward : Vec3f, origin := Vec3f.{}) -> Mat4f #must
+Mat4fFromRightUpForwardOrigin :: inline (right : Vec3f, up : Vec3f, forward : Vec3f, origin := Vec3f.{}) -> Mat4f
 {
     return Mat4FromRightUpForwardOrigin(right, up, forward, origin);
 }
 
-Mat4dFromRightUpForwardOrigin :: inline (right : Vec3d, up : Vec3d, forward : Vec3d, origin := Vec3d.{}) -> Mat4d #must
+Mat4dFromRightUpForwardOrigin :: inline (right : Vec3d, up : Vec3d, forward : Vec3d, origin := Vec3d.{}) -> Mat4d
 {
     return Mat4FromRightUpForwardOrigin(right, up, forward, origin);
 }
@@ -834,7 +834,7 @@ Mat4Rotate :: Mat4FromAxisAngle;
 
 Mat4fTranslate :: #bake_constants Mat4Translate(T = f32);
 Mat4dTranslate :: #bake_constants Mat4Translate(T = f64);
-Mat4Translate :: inline (vec : Vec3($T)) -> Mat4(T) #must
+Mat4Translate :: inline (vec : Vec3($T)) -> Mat4(T)
 {
     result : Mat4(T);
     result.r0c3 = vec.x;
@@ -846,7 +846,7 @@ Mat4Translate :: inline (vec : Vec3($T)) -> Mat4(T) #must
 
 Mat4fScale :: #bake_constants Mat4Scale(T = f32);
 Mat4dScale :: #bake_constants Mat4Scale(T = f64);
-Mat4Scale :: inline (vec : Vec3($T)) -> Mat4(T) #must
+Mat4Scale :: inline (vec : Vec3($T)) -> Mat4(T)
 {
     result : Mat4(T);
     result.r0c0 = vec.x;
@@ -858,12 +858,12 @@ Mat4Scale :: inline (vec : Vec3($T)) -> Mat4(T) #must
 
 Mat4fLookAt :: #bake_constants Mat4LookAt(T = f32);
 Mat4dLookAt :: #bake_constants Mat4LookAt(T = f64);
-Mat4LookAt :: inline (position : Vec3($T), target : Vec3(T), up : Vec3(T)) -> Mat4(T) #must
+Mat4LookAt :: inline (position : Vec3($T), target : Vec3(T), up : Vec3(T)) -> Mat4(T)
 {
     V :: Vec3(T);
     M :: Mat4(T);
 
-    AlignZ :: inline (axis : V, up : V) -> M #must
+    AlignZ :: inline (axis : V, up : V) -> M
     {
         x, y : V;
         y = up - axis * Dot(up, axis);
@@ -903,7 +903,7 @@ Mat4LookAt :: inline (position : Vec3($T), target : Vec3(T), up : Vec3(T)) -> Ma
 
 Mat4fOrthographicProjection :: #bake_constants Mat4OrthographicProjection(T = f32);
 Mat4dOrthographicProjection :: #bake_constants Mat4OrthographicProjection(T = f64);
-Mat4OrthographicProjection :: inline (l : $T, r : T, b : T, t : T, n : T, f : T, depth_range_01 := true) -> Mat4(T) #must
+Mat4OrthographicProjection :: inline (l : $T, r : T, b : T, t : T, n : T, f : T, depth_range_01 := true) -> Mat4(T)
 {
     result := Mat4(T).{
         2 / (r - l),           0,           0, (r + l) / (l - r),
@@ -923,7 +923,7 @@ Mat4OrthographicProjection :: inline (l : $T, r : T, b : T, t : T, n : T, f : T,
 
 Mat4fPerspectiveProjection :: #bake_constants Mat4PerspectiveProjection(T = f32);
 Mat4dPerspectiveProjection :: #bake_constants Mat4PerspectiveProjection(T = f64);
-Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f : T, left_handed := true, depth_range_01 := true) -> Mat4(T) #must
+Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f : T, left_handed := true, depth_range_01 := true) -> Mat4(T)
 {
     view_z := ifx left_handed then cast(T) 1 else cast(T) -1;
     t := math.tan(ToRads(fov_in_degrees) * 0.5) * n;
@@ -949,7 +949,7 @@ Mat4PerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, f :
 
 Mat4fInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection(T = f32);
 Mat4dInfinitePerspectiveProjection :: #bake_constants Mat4InfinitePerspectiveProjection(T = f64);
-Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, left_handed := true, depth_range_01 := true) -> Mat4(T) #must
+Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n : T, left_handed := true, depth_range_01 := true) -> Mat4(T)
 {
     view_z := ifx left_handed then cast(T) 1 else cast(T) -1;
     t := math.tan(ToRads(fov_in_degrees) * 0.5) * n;
@@ -975,19 +975,19 @@ Mat4InfinitePerspectiveProjection :: inline (fov_in_degrees : $T, aspect : T, n 
 
 Mat4fTransformSRT :: #bake_constants Mat4TransformSRT(T = f32);
 Mat4dTransformSRT :: #bake_constants Mat4TransformSRT(T = f64);
-Mat4TransformSRT :: inline (position : Vec3($T), rotation : Quat(T), scale : Vec3(T)) -> Mat4(T) #must
+Mat4TransformSRT :: inline (position : Vec3($T), rotation : Quat(T), scale : Vec3(T)) -> Mat4(T)
 {
     return Mat4Translate(position) * Mat4FromQuat(rotation) * Mat4Scale(scale);
 }
 
-TranslationVector :: inline (mat : $M/Matrix) -> Vector(M.T, 3) #must
+TranslationVector :: inline (mat : $M/Matrix) -> Vector(M.T, 3)
 {
     #assert M.M >= 3 && M.N >= 4 "Invalid dimensions for matrix (need at least 3 rows and 4 columns).";
     return GetCol(mat, 3).xyz;
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-Inverse :: inline (mat : Matrix($T, 4, 4), epsilon : T = 0.00001) -> Matrix(T, 4, 4) #must, det : float
+Inverse :: inline (mat : Matrix($T, 4, 4), epsilon : T = 0.00001) -> Matrix(T, 4, 4), det : float
 {
     a := GetCol(mat, 0).xyz;
     b := GetCol(mat, 1).xyz;
@@ -1025,7 +1025,7 @@ Inverse :: inline (mat : Matrix($T, 4, 4), epsilon : T = 0.00001) -> Matrix(T, 4
 }
 
 // See: 1.7.5 Inverses of Small Matrices in 'Foundations of Game Development: Mathematics' by Eric Lengyel.
-Adjugate :: inline (mat : $M/Mat4) -> M #must, det : float
+Adjugate :: inline (mat : $M/Mat4) -> M, det : float
 {
     a := GetCol(mat, 0).xyz;
     b := GetCol(mat, 1).xyz;
@@ -1056,7 +1056,7 @@ Adjugate :: inline (mat : $M/Mat4) -> M #must, det : float
         Dot(s, v) + Dot(t, u);
 }
 
-Determinant :: inline (mat : Matrix($T, 4, 4)) -> T #must
+Determinant :: inline (mat : Matrix($T, 4, 4)) -> T
 {
     a := GetCol(mat, 0).xyz;
     b := GetCol(mat, 1).xyz;

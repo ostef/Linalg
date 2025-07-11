@@ -22,9 +22,9 @@ CoordinateAxes :: struct
 
 #add_context coordinate_axes := CoordinateAxes.{ .{ 1, 0, 0 }, .{ 0, 1, 0 }, .{ 0, 0, 1 } };
 
-MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> CoordinateAxes #must
+MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> CoordinateAxes
 {
-    IsAxis :: inline (str : string) -> bool #must
+    IsAxis :: inline (str : string) -> bool
     {
         if str.count != 2
             return false;
@@ -35,7 +35,7 @@ MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> 
         return true;
     }
 
-    ToVector :: inline (axis : string) -> Vec3f #must
+    ToVector :: inline (axis : string) -> Vec3f
     {
         sign := ifx axis[0] == #char "-" then -1.0 else 1.0;
         vector : Vec3f;
@@ -56,17 +56,17 @@ MakeCoordinateAxes :: inline (right : string, up : string, forward : string) -> 
     return .{ToVector(right), ToVector(up), ToVector(forward)};
 }
 
-IsVectorType :: inline (info : *Type_Info) -> bool #must
+IsVectorType :: inline (info : *Type_Info) -> bool
 {
     return GetVectorTypeInfo(info);
 }
 
-IsQuaternionType :: inline (info : *Type_Info) -> bool #must
+IsQuaternionType :: inline (info : *Type_Info) -> bool
 {
     return GetQuaternionTypeInfo(info);
 }
 
-IsMatrixType :: inline (info : *Type_Info) -> bool #must
+IsMatrixType :: inline (info : *Type_Info) -> bool
 {
     return GetMatrixTypeInfo(info);
 }

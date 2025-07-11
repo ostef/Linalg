@@ -25,7 +25,7 @@ QuatfFromEulerAnglesYZX :: #bake_arguments QuatfFromEulerAnglesOrdered(order=.YZ
 QuatfFromEulerAnglesZXY :: #bake_arguments QuatfFromEulerAnglesOrdered(order=.ZXY);
 QuatfFromEulerAnglesZYX :: #bake_arguments QuatfFromEulerAnglesOrdered(order=.ZYX);
 
-QuatFromEulerAnglesOrdered :: (euler : Vec3($T), $$order : EulerAnglesRotationOrder) -> Quat(T) #must
+QuatFromEulerAnglesOrdered :: (euler : Vec3($T), $$order : EulerAnglesRotationOrder) -> Quat(T)
 {
     a, b, c : Quat(T) = ---;
     X :: Vec3(T).{1,0,0};
@@ -63,7 +63,7 @@ QuatFromEulerAnglesOrdered :: (euler : Vec3($T), $$order : EulerAnglesRotationOr
     return a * (b * c);
 }
 
-ToEulerAngles :: (q : Quat($T), $$order : EulerAnglesRotationOrder) -> Vec3(T) #must
+ToEulerAngles :: (q : Quat($T), $$order : EulerAnglesRotationOrder) -> Vec3(T)
 {
     if #complete order ==
     {
@@ -76,17 +76,17 @@ ToEulerAngles :: (q : Quat($T), $$order : EulerAnglesRotationOrder) -> Vec3(T) #
     }
 }
 
-ToEulerAnglesXYZ :: (q : Quat($T)) -> Vec3(T) #must
+ToEulerAnglesXYZ :: (q : Quat($T)) -> Vec3(T)
 {
     return ToEulerAnglesXYZ(Mat3FromQuat(q));
 }
 
-ToEulerAnglesYXZ :: (q : Quat($T)) -> Vec3(T) #must
+ToEulerAnglesYXZ :: (q : Quat($T)) -> Vec3(T)
 {
     return ToEulerAnglesYXZ(Mat3FromQuat(q));
 }
 
-ToEulerAngles :: (m : Matrix($T, $M, $N), $$order : EulerAnglesRotationOrder) -> Vec3(T) #must
+ToEulerAngles :: (m : Matrix($T, $M, $N), $$order : EulerAnglesRotationOrder) -> Vec3(T)
 {
     if #complete order ==
     {
@@ -99,7 +99,7 @@ ToEulerAngles :: (m : Matrix($T, $M, $N), $$order : EulerAnglesRotationOrder) ->
     }
 }
 
-ToEulerAnglesXYZ :: (m : Matrix($T, $M, $N)) -> Vec3(T) #must
+ToEulerAnglesXYZ :: (m : Matrix($T, $M, $N)) -> Vec3(T)
 {
     T1 := math.atan2(m.r1c2, m.r2c2);
     C2 := math.sqrt(m.r0c0 * m.r0c0 + m.r0c1 * m.r0c1);
@@ -111,7 +111,7 @@ ToEulerAnglesXYZ :: (m : Matrix($T, $M, $N)) -> Vec3(T) #must
     return .{T1, T2, T3};
 }
 
-ToEulerAnglesYXZ :: (m : Matrix($T, $M, $N)) -> Vec3(T) #must
+ToEulerAnglesYXZ :: (m : Matrix($T, $M, $N)) -> Vec3(T)
 {
     T1 := math.atan2(m.r0c2, m.r2c2);
     C2 := math.sqrt(m.r1c0 * m.r1c0 + m.r1c1 * m.r1c1);
