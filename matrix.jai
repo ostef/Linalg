@@ -150,7 +150,7 @@ MatrixFromAxisAngle :: inline ($M : s64, $N : s64, axis : Vec3($T), angle : Vec3
     return result;
 }
 
-TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vector(T, 3)) -> Vector(T, 3) #must
+TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vector(T, 3)) -> Vector(T, 3)
 {
     #assert #run IsFloatingPoint(T) "T needs to be a floating point type.";
     #assert M >= 4 && N >= 4 "Invalid dimensions for matrix (need at least 4 rows and 4 columns).";
@@ -163,7 +163,7 @@ TransformPoint :: inline (mat : Matrix($T, $M, $N), point : Vector(T, 3)) -> Vec
     return result;
 }
 
-TransformVector :: inline (mat : Matrix($T, $M, $N), vec : Vector(T, 3)) -> Vector(T, 3) #must
+TransformVector :: inline (mat : Matrix($T, $M, $N), vec : Vector(T, 3)) -> Vector(T, 3)
 {
     #assert #run IsFloatingPoint(T) "T needs to be a floating point type.";
     #assert M >= 3 && N >= 3 "Invalid dimensions for matrix (need at least 3 rows and 3 columns).";
