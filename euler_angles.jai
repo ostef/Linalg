@@ -68,11 +68,13 @@ ToEulerAngles :: (q : Quat($T), $$order : EulerAnglesRotationOrder) -> Vec3(T)
     if #complete order ==
     {
     case .XYZ; return ToEulerAnglesXYZ(q);
-    // case .XZY; return ToEulerAnglesXZY(q);
     case .YXZ; return ToEulerAnglesYXZ(q);
-    // case .YZX; return ToEulerAnglesYZX(q);
-    // case .ZXY; return ToEulerAnglesZXY(q);
-    // case .ZYX; return ToEulerAnglesZYX(q);
+    case .XZY; #through;
+    case .YZX; #through;
+    case .ZXY; #through;
+    case .ZYX;
+        assert(false, "@Todo");
+        return .{};
     }
 }
 
@@ -91,11 +93,13 @@ ToEulerAngles :: (m : Matrix($T, $M, $N), $$order : EulerAnglesRotationOrder) ->
     if #complete order ==
     {
     case .XYZ; return ToEulerAnglesXYZ(m);
-    // case .XZY; return ToEulerAnglesXZY(m);
     case .YXZ; return ToEulerAnglesYXZ(m);
-    // case .YZX; return ToEulerAnglesYZX(m);
-    // case .ZXY; return ToEulerAnglesZXY(m);
-    // case .ZYX; return ToEulerAnglesZYX(m);
+    case .XZY; #through;
+    case .YZX; #through;
+    case .ZXY; #through;
+    case .ZYX;
+        assert(false, "@Todo");
+        return .{};
     }
 }
 
